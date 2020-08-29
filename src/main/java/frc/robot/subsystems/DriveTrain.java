@@ -59,6 +59,7 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         // Gyro
         gyro = new ADXRS450_Gyro();
         gyro.calibrate();
+        new Odometry(gyro, getRightPosition, getLeftPosition);
     }
 
     //Mostly taken from last year's robot
@@ -94,7 +95,7 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         SmartDashboard.putNumber("Front Left Motor Position", frontLeft.getSelectedSensorPosition());
         SmartDashboard.putNumber("Front Right Motor Velocity", frontRight.getSelectedSensorVelocity());
         SmartDashboard.putNumber("Front Left Motor Velocity", frontLeft.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("Gyro Value", gyro.getAngle());
+        //SmartDashboard.putNumber("Gyro Value", gyro.getAngle());
         
     }
 
