@@ -26,7 +26,7 @@ public final class DriveTrain extends SubsystemBaseWrapper {
     private final WPI_TalonSRX frontLeft = new WPI_TalonSRX(Constants.DriveTrain.FRONT_LEFT_MOTOR_ID);
     private final WPI_TalonSRX rearLeft = new WPI_TalonSRX(Constants.DriveTrain.REAR_LEFT_MOTOR_ID);
 
-    private final Gyro gyro;
+    private static Gyro gyro;
 
     private final DoubleSupplier getLeftPosition;
     private final DoubleSupplier getLeftVelocity;
@@ -59,33 +59,36 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         // Gyro
         gyro = new ADXRS450_Gyro();
         gyro.calibrate();
-        new Odometry(gyro, getRightPosition, getLeftPosition);
+        new Odometry(getRightPosition, getLeftPosition);
     }
 
-    //Mostly taken from last year's robot
+    // Mostly taken from last year's robot
     /**
      * The method to drive the robot.
-     * @param moveValue the amount that the robot should move (Y axis, Joystick rawAxis 1)
-     * @param rotateValue the amount that the robot should rotate (X axis, Joystick rawAxis 0)
-     * @param scaleValue the amount that everything should be scaled by (usually given by the
-     * little flap thing on the bottom of the joystick, Joystick rawAxis 3)
+     * 
+     * @param moveValue   the amount that the robot should move (Y axis, Joystick
+     *                    rawAxis 1)
+     * @param rotateValue the amount that the robot should rotate (X axis, Joystick
+     *                    rawAxis 0)
+     * @param scaleValue  the amount that everything should be scaled by (usually
+     *                    given by the little flap thing on the bottom of the
+     *                    joystick, Joystick rawAxis 3)
      */
     public void cheesyDrive(final double moveValue, final double rotateValue, final double adjustValue) {
         final double actualAdjustValue = ((-adjustValue + 1) / 2);
-        final double movevalue = Math.abs(moveValue) < Constants.CheesyDrive.Y_AXIS_DEADZONE_RANGE
-                ? 0
+        final double movevalue = Math.abs(moveValue) < Constants.CheesyDrive.Y_AXIS_DEADZONE_RANGE ? 0
                 : moveValue * actualAdjustValue;
 
-        //Deadzone on x axis only if y value is small
+        // Deadzone on x axis only if y value is small
         final double turnvalue = Math.abs(rotateValue) < Constants.CheesyDrive.X_AXIS_DEADZONE_RANGE
-                && Math.abs(moveValue) < Constants.CheesyDrive.X_AXIS_DEADZONE_Y_MIN
-                ? 0
-                : rotateValue * actualAdjustValue;
+                && Math.abs(moveValue) < Constants.CheesyDrive.X_AXIS_DEADZONE_Y_MIN ? 0
+                        : rotateValue * actualAdjustValue;
 
         this.robotDrive.arcadeDrive(movevalue, turnvalue, true);
-        //this.robotDrive.tankDrive((moveValue + rotateValue) * adjustValue, (moveValue - rotateValue) * adjustValue);
+        // this.robotDrive.tankDrive((moveValue + rotateValue) * adjustValue, (moveValue
+        // - rotateValue) * adjustValue);
     }
-    
+
     public void periodic() {
         SmartDashboard.putNumber("TalonSRX 0 (front right) Temperature", frontRight.getTemperature());
         SmartDashboard.putNumber("TalonSRX 1 (rear right) Temperature", rearRight.getTemperature());
@@ -95,14 +98,13 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         SmartDashboard.putNumber("Front Left Motor Position", frontLeft.getSelectedSensorPosition());
         SmartDashboard.putNumber("Front Right Motor Velocity", frontRight.getSelectedSensorVelocity());
         SmartDashboard.putNumber("Front Left Motor Velocity", frontLeft.getSelectedSensorVelocity());
-        //SmartDashboard.putNumber("Gyro Value", gyro.getAngle());
-        
+        SmartDashboard.putNumber("Gyro Value", gyro.getAngle());
+
     }
 
-    public double getRotation() {
+    public static double getRotation() {
         return gyro.getAngle();
     }
-
     public void calibrateGyro() {
         gyro.calibrate();
     }
