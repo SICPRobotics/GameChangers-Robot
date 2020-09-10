@@ -1,13 +1,12 @@
 package frc.robot.subsystems;
 
-import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
@@ -27,7 +26,7 @@ public final class DriveTrain extends SubsystemBaseWrapper {
     private final WPI_TalonSRX rearLeft = new WPI_TalonSRX(Constants.DriveTrain.REAR_LEFT_MOTOR_ID);
 
     private static Gyro gyro;
-
+    private Odometry odometry;
     private final DoubleSupplier getLeftPosition;
     private final DoubleSupplier getLeftVelocity;
     private final DoubleSupplier getRightPosition;
@@ -55,11 +54,11 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         getLeftVelocity = frontLeft::getSelectedSensorVelocity;
 
         this.robotDrive = new DifferentialDrive(left, right);
-
+        frontRight.getEncPosition();
         // Gyro
         gyro = new ADXRS450_Gyro();
         gyro.calibrate();
-        new Odometry(getRightPosition, getLeftPosition);
+        Odometry odometry = new Odometry(getRightPosition, getLeftPosition);
     }
 
     // Mostly taken from last year's robot
@@ -90,6 +89,8 @@ public final class DriveTrain extends SubsystemBaseWrapper {
     }
 
     public void periodic() {
+        odometry.getDistance(getRightPosition(), getLeftPosition());
+        odometry.update();
         SmartDashboard.putNumber("TalonSRX 0 (front right) Temperature", frontRight.getTemperature());
         SmartDashboard.putNumber("TalonSRX 1 (rear right) Temperature", rearRight.getTemperature());
         SmartDashboard.putNumber("TalonSRX 2 (rear left) Temperature", rearLeft.getTemperature());
