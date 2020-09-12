@@ -29,10 +29,18 @@ public class PiClient {
 
         public void onClose(int code, String message, boolean bool) {
             System.out.println("Connection closed");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            PiClient.this.connect();
         }
 
         public void onOpen(ServerHandshake handshake) {
             System.out.println("Connected to Pi");
+
         }
 
         public void onMessage(String message) {
@@ -45,8 +53,30 @@ public class PiClient {
     }
 
     public PiClient() {
-        this.socketClient = new PiWebSocketClient(URI.create(Constants.PiClient.uri));
         this.updateReader = objectMapper.readerForUpdating(status);
+        connect();
+        /*new Thread(() -> {
+            for (;;) {
+                try {
+                    this.socketClient.connect();
+                    System.out.println("Connected to Pi!");
+                    break;
+                } catch (Exception ex) {
+                    System.out.println("Connection failed: " + ex);
+                }
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();   */
+    }
+
+    private void connect() {
+        this.socketClient = new PiWebSocketClient(URI.create(Constants.PiClient.uri));
+        this.socketClient.connect();
     }
 
     private void updateStatus(String newStatus) {

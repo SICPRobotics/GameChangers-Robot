@@ -1,5 +1,6 @@
 package frc.robot.pi_client;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonMerge;
 
 public class VisionStatus {
@@ -9,6 +10,11 @@ public class VisionStatus {
         public int width;
         public int height;
 
+        @JsonCreator
+        public VisionRect() {
+
+        }
+        
         public VisionRect(int x, int y, int width, int height) {
             this.x = x;
             this.y = y;

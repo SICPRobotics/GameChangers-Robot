@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import java.util.Set;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
@@ -32,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.controllers.OperatorController;
 import frc.robot.pi_client.PiClient;
@@ -64,7 +66,7 @@ import frc.robot.subsystems.Lights;
 public final class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final Joystick joystick = new Joystick(0);
+  /*private final Joystick joystick = new Joystick(0);
 
   private final OperatorController operatorController = new OperatorController(1);
   private final DriveTrain driveTrain;
@@ -81,14 +83,14 @@ public final class RobotContainer {
   private final Lights lights;
   private final RightWinch rightWinch;
   private final LeftWinch leftWinch;
-  private final Gyro gyro;
+  private final Gyro gyro;*/
   private final PiClient piClient = new PiClient();
  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    driveTrain = new DriveTrain();
+    /*driveTrain = new DriveTrain();
     groundIntake = new GroundIntake();
     colorWheelSpinner = new ColorWheelSpinner();
     leftWinch = new LeftWinch();
@@ -108,7 +110,7 @@ public final class RobotContainer {
     gyro = new ADXRS450_Gyro();
     // Configure the button bindings
     configureButtonBindings();  
-    SmartDashboard.putNumber("Auton Chooser", 0);
+    SmartDashboard.putNumber("Auton Chooser", 0);*/
   }
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -117,7 +119,7 @@ public final class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    thumbButton.toggleWhenPressed(new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
+    //thumbButton.toggleWhenPressed(new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
     //GROUND INTAKE
     //new Trigger(() -> operatorController.triggers.right.get() > 0.1).whileActiveContinuous(new Toggle(groundIntake));
     //groundIntake.setDefaultCommand(new SetMotorContinuous(groundIntake, operatorController.sticks.left::getY));
@@ -128,7 +130,7 @@ public final class RobotContainer {
     new SetMotorContinuous(groundIntake, () -> Math.signum(operatorController.sticks.left.getY()) * Constants.GroundIntake.SNAP_SPEED));
     */
 
-    //COLOR WHEEL
+    /*//COLOR WHEEL
     //Rotate to color / rotate a number of times
     operatorController.buttons.RB.toggleWhenPressed(new SpinNumberOfTimes(colorWheelSpinner));
     operatorController.buttons.LB.toggleWhenPressed(new SpinToColor(colorWheelSpinner));
@@ -179,12 +181,12 @@ public final class RobotContainer {
     /**
      * Blockers
      * These block the subsystems to keep other commands from using them
-     */
+     *//*
     Command blockIntakes = new RunCommand(() -> {}, groundIntake, pastaPuller).perpetually();
     
     /**
      * These commands run the subsystems.
-     */
+     *//*
     Command runLeftWinch = new RunCommand(() -> {
       double stickValue = operatorController.sticks.left.getY();
       leftWinch.setMotor(stickValue);
@@ -240,10 +242,11 @@ public final class RobotContainer {
 
     //GATE
     //operatorController.buttons.dPad.down.toggleWhenPressed(new FunctionalCommand(gate::extend, () -> { }, b -> gate.retract(), () -> false, gate));
-    new Trigger(() -> operatorController.triggers.left.get() > 0.1).toggleWhenActive(new ExtendPiston(gate));
-    new Trigger(gate::isUp).whileActiveContinuous(new SetLightsToColor(lights, Lights.LightsColor.ORANGE).perpetually());
+    //new Trigger(() -> operatorController.triggers.left.get() > 0.1).toggleWhenActive(new ExtendPiston(gate));
+    //new Trigger(gate::isUp).whileActiveContinuous(new SetLightsToColor(lights, Lights.LightsColor.ORANGE).perpetually());
   }
 
+  /*
   public double getJoystickX() {
     return this.joystick.getRawAxis(Constants.Joystick.X_AXIS);
   }
@@ -258,13 +261,21 @@ public final class RobotContainer {
 
   public double getJoystickAdjust() {
     return this.joystick.getRawAxis(Constants.Joystick.ADJUST_AXIS);
-  }
+  }*/
 
   
   // * @return the command to run in autonomous
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new AutonomusCommand(driveTrain, gate, pastaPuller, hangerArm, gyro);
+    //return new AutonomusCommand(driveTrain, gate, pastaPuller, hangerArm, gyro);
+    return new Command(){
+    
+      @Override
+      public Set<Subsystem> getRequirements() {
+        // TODO Auto-generated method stub
+        return null;
+      }
+    };
   }
   
 }
