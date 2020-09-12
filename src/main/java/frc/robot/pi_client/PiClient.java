@@ -1,41 +1,81 @@
 package frc.robot.pi_client;
 
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
-/**
- * WebSocket client class for connecting to the Pi (for vision)
- */
-public class PiClient extends WebSocketClient {
-    private PiClient(URI uri) {
-        super(uri);
-    }
+import frc.robot.Constants;
 
-    public static PiClient create(String uri) {
-        try {
-            return new PiClient(new URI(uri));
-        } catch (Exception ex) {
-            System.out.println("Could not create Pi client: " + ex);
-            return null;
+public class PiClient {
+    static final ObjectMapper objectMapper = new ObjectMapper();
+    private List<Consumer<VisionStatus>> consumers = new ArrayList<>();
+    private List<VisionObserver> observers = new ArrayList<>();
+    private PiWebSocketClient socketClient;
+    private VisionStatus status = new VisionStatus();
+    private ObjectReader updateReader;
+
+    private class PiWebSocketClient extends WebSocketClient {
+        public PiWebSocketClient(URI uri) {
+            super(uri);
+        }
+
+        public void onClose(int code, String message, boolean bool) {
+            System.out.println("Connection closed");
+        }
+
+        public void onOpen(ServerHandshake handshake) {
+            System.out.println("Connected to Pi");
+        }
+
+        public void onMessage(String message) {
+            updateStatus(message);
+        }
+
+        public void onError(Exception ex) {
+            System.out.println("Pi Client Error: " + ex);
         }
     }
 
-    public void onClose(int code, String message, boolean bool) {
-        System.out.println("Connection closed");
+    public PiClient() {
+        this.socketClient = new PiWebSocketClient(URI.create(Constants.PiClient.uri));
+        this.updateReader = objectMapper.readerForUpdating(status);
     }
 
-    public void onOpen(ServerHandshake handshake) {
-        System.out.println("Connected to Pi");
+    private void updateStatus(String newStatus) {
+        try {
+            this.updateReader.readValue(newStatus);
+            System.out.println("Got new status: " + newStatus);
+
+            dispatchUpdates();
+        } catch (JsonProcessingException e) {
+            System.out.println("Error parsing JSON");
+            e.printStackTrace();
+        }
     }
 
-    public void onMessage(String message) {
-        // json parse the message
+    public void dispatchUpdates() {
+        for (Consumer<VisionStatus> consumer : consumers) {
+            consumer.accept(status);
+        }
+
+        for (VisionObserver observer : observers) {
+            observer.onVisionUpdate(status);
+        }
     }
 
-    public void onError(Exception ex) {
-        System.out.println("Pi Client Error: " + ex);
+    public void onVisionUpdate(Consumer<VisionStatus> consumer) {
+        this.consumers.add(consumer);
+    }
+
+    public void onVisionUpdate(VisionObserver observer) {
+        this.observers.add(observer);
     }
 }

@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.controllers.OperatorController;
+import frc.robot.pi_client.PiClient;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.controllers.OperatorController;
 import frc.robot.subsystems.DriveTrain;
@@ -81,6 +82,7 @@ public final class RobotContainer {
   private final RightWinch rightWinch;
   private final LeftWinch leftWinch;
   private final Gyro gyro;
+  private final PiClient piClient = new PiClient();
  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.

@@ -103,4 +103,8 @@ public final class Constants {
         public static final int Z_AXIS = 2;
         public static final int ADJUST_AXIS = 3;
     }
+
+    public static final class PiClient {
+        public static final String uri = "ws://frcvision.local:5800";
+    }
 }
