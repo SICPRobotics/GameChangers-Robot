@@ -82,7 +82,7 @@ public class PiClient {
     private void updateStatus(String newStatus) {
         try {
             this.updateReader.readValue(newStatus);
-            System.out.println("Got new status: " + newStatus);
+            //System.out.println("Got new status: " + newStatus);
 
             dispatchUpdates();
         } catch (JsonProcessingException e) {
@@ -108,4 +108,8 @@ public class PiClient {
     public void onVisionUpdate(VisionObserver observer) {
         this.observers.add(observer);
     }
-}
+
+    public VisionStatus getVisionStatus() {
+        return this.status;
+    }
+} 

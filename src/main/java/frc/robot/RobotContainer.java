@@ -13,6 +13,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -30,6 +31,7 @@ import frc.robot.commands.NudgeMotor;
 import frc.robot.subsystems.Compessor;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -66,11 +68,11 @@ import frc.robot.subsystems.Lights;
 public final class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  /*private final Joystick joystick = new Joystick(0);
+  private final Joystick joystick = new Joystick(0);
 
   private final OperatorController operatorController = new OperatorController(1);
   private final DriveTrain driveTrain;
-  private final GroundIntake groundIntake;
+  /*private final GroundIntake groundIntake;
   private final Compessor compressor;
   private final ColorWheelSpinner colorWheelSpinner;
   private final HangerArm hangerArm;
@@ -90,8 +92,9 @@ public final class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    /*driveTrain = new DriveTrain();
-    groundIntake = new GroundIntake();
+    driveTrain = new DriveTrain();
+    driveTrain.setDefaultCommand(new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust));
+    /*groundIntake = new GroundIntake();
     colorWheelSpinner = new ColorWheelSpinner();
     leftWinch = new LeftWinch();
     rightWinch = new RightWinch();
@@ -108,9 +111,10 @@ public final class RobotContainer {
     //cameras = new Cameras();
     hangerArm = new HangerArm();
     gyro = new ADXRS450_Gyro();
+    SmartDashboard.putNumber("Auton Chooser", 0);*/
+    
     // Configure the button bindings
     configureButtonBindings();  
-    SmartDashboard.putNumber("Auton Chooser", 0);*/
   }
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -119,6 +123,14 @@ public final class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    JoystickButton button = new JoystickButton(joystick, 2);
+    button.whileHeld(new PIDCommand(
+      new PIDController(0.001, 0.001, 0.001),
+      () -> (piClient.getVisionStatus().bbox.x),
+      320 / 2,
+      output -> driveTrain.cheesyDrive(0, - output, -1),
+      driveTrain
+    ));
     //thumbButton.toggleWhenPressed(new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
     //GROUND INTAKE
     //new Trigger(() -> operatorController.triggers.right.get() > 0.1).whileActiveContinuous(new Toggle(groundIntake));
@@ -246,7 +258,6 @@ public final class RobotContainer {
     //new Trigger(gate::isUp).whileActiveContinuous(new SetLightsToColor(lights, Lights.LightsColor.ORANGE).perpetually());
   }
 
-  /*
   public double getJoystickX() {
     return this.joystick.getRawAxis(Constants.Joystick.X_AXIS);
   }
@@ -261,7 +272,7 @@ public final class RobotContainer {
 
   public double getJoystickAdjust() {
     return this.joystick.getRawAxis(Constants.Joystick.ADJUST_AXIS);
-  }*/
+  }
 
   
   // * @return the command to run in autonomous
