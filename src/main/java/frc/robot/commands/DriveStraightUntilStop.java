@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -23,6 +25,16 @@ public final class DriveStraightUntilStop extends CommandBase {
         this.secondsFast = secondsFast;
         this.slowSpeed = slowSpeed;
         this.fastSpeed = fastSpeed;
+    }
+
+    public static DriveStraightUntilStop fromJson(DriveTrain driveTrain, JsonNode json) {
+        return new DriveStraightUntilStop(
+            driveTrain,
+            json.get("heading").asDouble(),
+            json.get("secondsFast").asDouble(),
+            json.get("slowSpeed").asDouble(),
+            json.get("fastSpeed").asDouble()
+        );
     }
 
     public DriveStraightUntilStop(final DriveTrain driveTrain, final double heading, final double secondsFast) {
