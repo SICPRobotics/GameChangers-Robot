@@ -125,10 +125,10 @@ public final class RobotContainer {
   private void configureButtonBindings() {
     JoystickButton button = new JoystickButton(joystick, 2);
     button.whileHeld(new PIDCommand(
-      new PIDController(0.001, 0.001, 0.001),
+      new PIDController(0.05, 0/*0.001*/, 0.020),
       () -> (piClient.getVisionStatus().bbox.x),
       320 / 2,
-      output -> driveTrain.cheesyDrive(0, - output, -1),
+      output -> driveTrain.cheesyDrive(0, Math.abs(output) < 0.1 ? 0 : (- Math.min(Math.abs(output), 0.5) * Math.signum(output)), -1),
       driveTrain
     ));
     //thumbButton.toggleWhenPressed(new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
