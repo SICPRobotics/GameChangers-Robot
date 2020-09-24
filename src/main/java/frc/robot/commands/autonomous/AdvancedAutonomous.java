@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,18 +29,13 @@ public class AdvancedAutonomous extends SequentialCommandGroup {
             return new AdvancedAutonomous();
         }
 
-        
     }
 
-    private static CommandBase parse(SubsystemContainer subs, JsonNode jsonCommand) {
-        if (jsonCommand.at("type").asText().equals("DriveStraightUntilStop")) {
-
-        }
-
+    private static CommandBase parse(SubsystemContainer subs, JsonNode jsonCommand) throws JsonProcessingException {
         JsonNode value = jsonCommand.get("value");
         switch (jsonCommand.get("type").asText()) {
             //case "DriveStraightUntilStop": return DriveStraightUntilStop.fromJson(subs, value);
-            case "TimedDrive": return new TimedDrive(subs, options)
+            case "TimedDrive": return TimedDrive.fromJson(subs, value);
         }
     }
 }
