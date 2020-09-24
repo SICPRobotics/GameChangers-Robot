@@ -6,10 +6,16 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
@@ -26,11 +32,18 @@ public final class DriveTrain extends SubsystemBaseWrapper {
     private final WPI_TalonSRX rearLeft = new WPI_TalonSRX(Constants.DriveTrain.REAR_LEFT_MOTOR_ID);
 
     private static Gyro gyro;
-    private Odometry odometry;
     private final DoubleSupplier getLeftPosition;
     private final DoubleSupplier getLeftVelocity;
     private final DoubleSupplier getRightPosition;
     private final DoubleSupplier getRightVelocity;
+    
+    private final double STARTING_POSITOIN_X = 1;
+    private final double STARTING_POSITOIN_Y = 1;
+    
+    private final Encoder rightEncoder;
+    private final Encoder leftEncoder;
+
+    private DifferentialDriveOdometry differentialDriveOdometry;
 
     public DriveTrain() {
         super();
@@ -53,12 +66,17 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         getLeftPosition = frontLeft::getSelectedSensorPosition;
         getLeftVelocity = frontLeft::getSelectedSensorVelocity;
 
+        rightEncoder = new Encoder(1, 0, false, EncodingType.k2X);
+        leftEncoder = new Encoder(3, 2, false, EncodingType.k2X);
+        calibrateDriveEncoders();
+        
         this.robotDrive = new DifferentialDrive(left, right);
-        frontRight.getEncPosition();
         // Gyro
         gyro = new ADXRS450_Gyro();
         gyro.calibrate();
-        Odometry odometry = new Odometry(getRightPosition, getLeftPosition);
+        gyro.reset();
+        gyro.getAngle();
+        differentialDriveOdometry = new DifferentialDriveOdometry(new Rotation2d(getRotation()), new Pose2d(STARTING_POSITOIN_X, STARTING_POSITOIN_Y, new Rotation2d(getRotation())));
     }
 
     // Mostly taken from last year's robot
@@ -89,8 +107,9 @@ public final class DriveTrain extends SubsystemBaseWrapper {
     }
 
     public void periodic() {
-        odometry.getDistance(getRightPosition(), getLeftPosition());
-        odometry.update();
+        SmartDashboard.putString("Pose 2D", differentialDriveOdometry.getPoseMeters().toString());
+        differentialDriveOdometry.update(new Rotation2d(getRotation()), (getLeftPosition.getAsDouble() / -7100) , (getRightPosition.getAsDouble() / 7100));
+        resetDriveEncoders();
         SmartDashboard.putNumber("TalonSRX 0 (front right) Temperature", frontRight.getTemperature());
         SmartDashboard.putNumber("TalonSRX 1 (rear right) Temperature", rearRight.getTemperature());
         SmartDashboard.putNumber("TalonSRX 2 (rear left) Temperature", rearLeft.getTemperature());
@@ -100,14 +119,30 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         SmartDashboard.putNumber("Front Right Motor Velocity", frontRight.getSelectedSensorVelocity());
         SmartDashboard.putNumber("Front Left Motor Velocity", frontLeft.getSelectedSensorVelocity());
         SmartDashboard.putNumber("Gyro Value", gyro.getAngle());
-
+        
     }
 
-    public static double getRotation() {
+    public double getRotation() {
         return gyro.getAngle();
     }
     public void calibrateGyro() {
         gyro.calibrate();
+    }
+    public void calibrateDriveEncoders(){
+        rightEncoder.setDistancePerPulse(0.1524/360); // for 6 in circumfrance wheels Change to match correct wheel size, also this will move to constants after I am done 
+        rightEncoder.setMinRate(10);
+        rightEncoder.setMaxPeriod(0.1);
+        leftEncoder.setDistancePerPulse(0.1524/360); 
+        leftEncoder.setMinRate(10);
+        leftEncoder.setMaxPeriod(0.1);
+        resetDriveEncoders();
+    }
+    public Pose2d getPose() {
+        return differentialDriveOdometry.getPoseMeters();
+    }
+    public void resetDriveEncoders(){
+        rightEncoder.reset();
+        leftEncoder.reset();
     }
 
     public double getLeftPosition() {

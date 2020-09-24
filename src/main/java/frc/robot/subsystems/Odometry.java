@@ -17,32 +17,32 @@ import frc.robot.SubsystemBaseWrapper;
 
 public final class Odometry extends SubsystemBaseWrapper {
 
-    // Move to Constatns after finish 
-    private final double STARTING_POSITOIN_X = 1;
-    private final double STARTING_POSITOIN_Y = 1;
-    private Rotation2d rotation;
-    private Pose2d pose;
-    private double right, left;
+    // // Move to Constatns after finish 
+    // private final double STARTING_POSITOIN_X = 1;
+    // private final double STARTING_POSITOIN_Y = 1;
+    // private Rotation2d rotation;
+    // private Pose2d pose;
+    // private double right, left;
 
-    private DifferentialDriveOdometry differentialDriveOdometry;
+    // private DifferentialDriveOdometry differentialDriveOdometry;
 
-    public Odometry(DoubleSupplier right, DoubleSupplier left) {
-        super();
-        this.right = right.getAsDouble();
-        this.left = left.getAsDouble();
-        rotation = new Rotation2d(DriveTrain.getRotation());
-        pose = new Pose2d(STARTING_POSITOIN_X, STARTING_POSITOIN_Y, rotation);
-        differentialDriveOdometry = new DifferentialDriveOdometry(rotation, pose);
-    }
+    // public Odometry() {
+    //     super();
+    //     this.right = 0;
+    //     this.left = 0;
+    //     differentialDriveOdometry = new DifferentialDriveOdometry(new Rotation2d(DriveTrain.getRotation()), new Pose2d(STARTING_POSITOIN_X, STARTING_POSITOIN_Y, rotation));
+    // }
 
-    public void update(){
-        if()
-        differentialDriveOdometry.update(new Rotation2d(Math.toRadians(DriveTrain.getRotation())), right, left);
-        SmartDashboard.putString("Odometry", differentialDriveOdometry.getPoseMeters().toString());
+    // public void update(){
+    //     differentialDriveOdometry.update(new Rotation2d(Math.toRadians(DriveTrain.getRotation())), right, left);
+    //     SmartDashboard.putString("Odometry", differentialDriveOdometry.getPoseMeters().toString());
 
-    }
-    public void getDistance(double right, double left){
-        this.right = right;
-        this.left = left;
-    }
+    // }
+    // public void getDistance(double right, double left){
+    //     this.right = right;
+    //     this.left = left;
+    // }
+    // public Pose2d getPose(){
+    //     return differentialDriveOdometry.getPoseMeters();
+    // }
 }

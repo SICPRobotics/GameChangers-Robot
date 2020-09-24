@@ -13,7 +13,7 @@ public final class Hanger extends SubsystemBaseWrapper implements MotorSubsystem
    // private final TalonSRX armMotor;
     private final VictorSPX rightWinchMotor;
     private final VictorSPX leftWinchMotor;
-    private final Encoder encoder;
+    //private final Encoder encoder;
 
     public Hanger() {
         super();
@@ -21,7 +21,7 @@ public final class Hanger extends SubsystemBaseWrapper implements MotorSubsystem
        // armMotor = new TalonSRX(Constants.Hanger.ARM_MOTOR_ID);
         rightWinchMotor = new VictorSPX(Constants.Hanger.RIGHT_WINCH_MOTOR_ID);
         leftWinchMotor = new VictorSPX(Constants.Hanger.LEFT_WINCH_MOTOR_ID);
-        encoder = new Encoder(Constants.Hanger.ENCODER_ID_A, Constants.Hanger.ENCODER_ID_B);
+        //encoder = new Encoder(Constants.Hanger.ENCODER_ID_A, Constants.Hanger.ENCODER_ID_B);
     }
 
     public void setMotor(final double value) {
