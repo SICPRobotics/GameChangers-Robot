@@ -11,10 +11,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.SubsystemContainer;
 import frc.robot.commands.DriveStraightUntilStop;
+import frc.robot.commands.TimedDrive;
 
 public class AdvancedAutonomous extends SequentialCommandGroup {
 
-    private static ObjectMapper mapper = new ObjectMapper();
+    public static ObjectMapper mapper = new ObjectMapper();
 
     public static AdvancedAutonomous load() {
         Map<String, String> env = System.getenv();
@@ -37,7 +38,8 @@ public class AdvancedAutonomous extends SequentialCommandGroup {
 
         JsonNode value = jsonCommand.get("value");
         switch (jsonCommand.get("type").asText()) {
-            case "DriveStraightUntilStop": return DriveStraightUntilStop.fromJson(subs, value);
+            //case "DriveStraightUntilStop": return DriveStraightUntilStop.fromJson(subs, value);
+            case "TimedDrive": return new TimedDrive(subs, options)
         }
     }
 }

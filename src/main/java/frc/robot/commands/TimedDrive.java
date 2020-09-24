@@ -1,7 +1,11 @@
 package frc.robot.commands;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.SubsystemContainer;
+import frc.robot.commands.autonomous.AdvancedAutonomous;
 
 public class TimedDrive extends AdvancedCommand<TimedDrive.Options> {
     public static class Options {
@@ -22,11 +26,16 @@ public class TimedDrive extends AdvancedCommand<TimedDrive.Options> {
     }
 
     final Timer timer;
+
     public TimedDrive(SubsystemContainer subs, Options options) {
         super(subs, options);
 
         timer = new Timer();
         addRequirements(subs.driveTrain);
+    }
+
+    public static TimedDrive fromJson(SubsystemContainer subs, JsonNode json) throws JsonProcessingException {
+        return new TimedDrive(subs, AdvancedAutonomous.mapper.treeToValue(json, TimedDrive.Options.class));
     }
 
     @Override
