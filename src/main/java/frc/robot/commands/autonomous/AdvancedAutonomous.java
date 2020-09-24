@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.DriveStraightUntilStop;
 
 public class AdvancedAutonomous extends SequentialCommandGroup {
 
@@ -35,7 +36,7 @@ public class AdvancedAutonomous extends SequentialCommandGroup {
 
         JsonNode value = jsonCommand.get("value");
         switch (jsonCommand.get("type").asText()) {
-            case "DriveStraightUntilStop": return DriveStraightUntilStop.fromJson()
+            case "DriveStraightUntilStop": return DriveStraightUntilStop.fromJson(value);
         }
     }
 }

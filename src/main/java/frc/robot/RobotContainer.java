@@ -8,55 +8,19 @@
 package frc.robot;
 
 import java.util.Set;
-import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AutonomusCommand;
-import frc.robot.commands.Calibrate;
-import frc.robot.commands.DoNothing;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.DriveWithJoystick;
-//import frc.robot.commands.ExtendHangerArm;
-import frc.robot.commands.SetMotorContinuous;
-import frc.robot.commands.color_wheel.SpinNumberOfTimes;
-import frc.robot.commands.color_wheel.SpinToColor;
-import frc.robot.commands.ExtendPiston;
-import frc.robot.commands.NudgeMotor;
-import frc.robot.subsystems.Compessor;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.DriveWithJoystick;
 import frc.robot.controllers.OperatorController;
 import frc.robot.pi_client.PiClient;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.controllers.OperatorController;
-import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.controllers.OperatorController;
-import frc.robot.subsystems.Cameras;
-import frc.robot.subsystems.ColorWheelPiston;
-import frc.robot.subsystems.ColorWheelSpinner;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.GroundIntake;
-import frc.robot.subsystems.Hanger;
-import frc.robot.subsystems.HangerArm;
-import frc.robot.subsystems.LeftWinch;
-import frc.robot.subsystems.PastaPuller;
-import frc.robot.subsystems.RightWinch;
-import frc.robot.subsystems.Gate;
-import frc.robot.commands.SetLightsToColor;
-import frc.robot.subsystems.Lights;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -80,7 +44,7 @@ public final class RobotContainer {
    */
   public RobotContainer() {
     subs.driveTrain = new DriveTrain();
-    driveTrain.setDefaultCommand(new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust));
+    subs.driveTrain.setDefaultCommand(new DriveWithJoystick(subs.driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust));
     /*groundIntake = new GroundIntake();
     colorWheelSpinner = new ColorWheelSpinner();
     leftWinch = new LeftWinch();
@@ -115,8 +79,8 @@ public final class RobotContainer {
       new PIDController(0.05, 0/*0.001*/, 0.020),
       () -> (piClient.getVisionStatus().bbox.x),
       320 / 2,
-      output -> driveTrain.cheesyDrive(0, Math.abs(output) < 0.1 ? 0 : (- Math.min(Math.abs(output), 0.5) * Math.signum(output)), -1),
-      driveTrain
+      output -> subs.driveTrain.cheesyDrive(0, Math.abs(output) < 0.1 ? 0 : (- Math.min(Math.abs(output), 0.5) * Math.signum(output)), -1),
+      subs.driveTrain
     ));
     //thumbButton.toggleWhenPressed(new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
     //GROUND INTAKE
