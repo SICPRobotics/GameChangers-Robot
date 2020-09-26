@@ -57,7 +57,7 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         
         this.robotDrive = new DifferentialDrive(left, right);
         // Gyro
-        gyro = new ADXRS450_Gyro(Port.kMXP);
+        gyro = new ADXRS450_Gyro(Port.kOnboardCS0);
         gyro.calibrate();
         gyro.reset();
         gyro.getAngle();
@@ -79,7 +79,7 @@ public final class DriveTrain extends SubsystemBaseWrapper {
      *                    joystick, Joystick rawAxis 3)
      */
     public void cheesyDrive(final double moveValue, final double rotateValue, final double scaleValue) {
-        System.out.println("Attempted rotate " + rotateValue);
+        //System.out.println("Attempted rotate " + rotateValue);
         final double actualAdjustValue = ((-scaleValue + 1) / 2);
         final double movevalue = Math.abs(moveValue) < Constants.CheesyDrive.Y_AXIS_DEADZONE_RANGE
                 ? 0

@@ -62,11 +62,16 @@ public class Minitrue {
     }
 
     public Pose2d updatePose(Rotation2d gyroAngle, double leftDistanceMeters, double rightDistanceMeters) {
-        return truth.odometry.update(gyroAngle, leftDistanceMeters, rightDistanceMeters);
+        this.beforePoseUpdate.fire(truth);
+        Pose2d pose = truth.odometry.update(gyroAngle, leftDistanceMeters, rightDistanceMeters);
+        this.onPoseUpdate.fire(truth);
+        return pose;
     }
 
     public Pose2d setPose(Rotation2d gyroAngle, Rotation2d robotRotation, double x, double y) {
+        this.beforePoseSet.fire(truth);
         truth.odometry.resetPosition(new Pose2d(x, y, robotRotation), gyroAngle);
+        this.onPoseUpdate.fire(truth);
         return getPose();
     }
 }

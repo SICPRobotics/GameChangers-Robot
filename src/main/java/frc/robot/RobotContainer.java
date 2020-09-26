@@ -45,6 +45,7 @@ public final class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    minitrue.onPoseUpdate(truth -> System.out.println("X: " + minitrue.getPose().getTranslation().getX() + "  Y: " + minitrue.getPose().getTranslation().getY() + "  Rot: " + minitrue.getPose().getRotation()));
     subs.driveTrain = new DriveTrain(minitrue);
     subs.driveTrain.setDefaultCommand(new DriveWithJoystick(subs.driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust));
     /*groundIntake = new GroundIntake();
