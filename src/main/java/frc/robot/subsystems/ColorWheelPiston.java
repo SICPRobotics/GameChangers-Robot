@@ -4,13 +4,14 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
+import frc.robot.truth.Minitrue;
 
 public final class ColorWheelPiston extends SubsystemBaseWrapper implements PistonSubsystem {
     private final DoubleSolenoid solenoid = 
             new DoubleSolenoid(Constants.ColorWheel.DOUBLE_SOLENOID_FORWARD_ID, Constants.ColorWheel.DOUBLE_SOLENOID_REVERSE_ID);
     
-    public ColorWheelPiston() {
-        super();
+    public ColorWheelPiston(Minitrue minitrue) {
+        super(minitrue);
     }
     
     public void pistonForward() {
