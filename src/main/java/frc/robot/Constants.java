@@ -18,6 +18,9 @@ package frc.robot;
  * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final class Wheel {
+        public static final double circumference = 0.200 * Math.PI; 
+    }
     public static final class GroundIntake {
         public static final int MOTOR_ID = 9;
         public static final double SPEED = 1.0;

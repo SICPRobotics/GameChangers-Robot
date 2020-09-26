@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
+import frc.robot.Constants.Wheel;
 
 /**
  * the DriveTrain, aka the thing that moves the robot
@@ -39,9 +40,6 @@ public final class DriveTrain extends SubsystemBaseWrapper {
     
     private final double STARTING_POSITOIN_X = 1;
     private final double STARTING_POSITOIN_Y = 1;
-    
-    private final Encoder rightEncoder;
-    private final Encoder leftEncoder;
 
     private DifferentialDriveOdometry differentialDriveOdometry;
 
@@ -65,14 +63,10 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         SpeedControllerGroup left = new SpeedControllerGroup(frontLeft, rearLeft);
         getLeftPosition = frontLeft::getSelectedSensorPosition;
         getLeftVelocity = frontLeft::getSelectedSensorVelocity;
-
-        rightEncoder = new Encoder(1, 0, false, EncodingType.k2X);
-        leftEncoder = new Encoder(3, 2, false, EncodingType.k2X);
-        calibrateDriveEncoders();
         
         this.robotDrive = new DifferentialDrive(left, right);
         // Gyro
-        gyro = new ADXRS450_Gyro();
+        gyro = new ADXRS450_Gyro(Port.kMXP);
         gyro.calibrate();
         gyro.reset();
         gyro.getAngle();
@@ -128,7 +122,7 @@ public final class DriveTrain extends SubsystemBaseWrapper {
     public void calibrateGyro() {
         gyro.calibrate();
     }
-    public void calibrateDriveEncoders(){
+    /*public void calibrateDriveEncoders(){
         rightEncoder.setDistancePerPulse(0.1524/360); // for 6 in circumfrance wheels Change to match correct wheel size, also this will move to constants after I am done 
         rightEncoder.setMinRate(10);
         rightEncoder.setMaxPeriod(0.1);
@@ -136,21 +130,30 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         leftEncoder.setMinRate(10);
         leftEncoder.setMaxPeriod(0.1);
         resetDriveEncoders();
-    }
+    }*/
     public Pose2d getPose() {
         return differentialDriveOdometry.getPoseMeters();
     }
+
     public void resetDriveEncoders(){
-        rightEncoder.reset();
-        leftEncoder.reset();
+        frontRight.setSelectedSensorPosition(0);
+        frontLeft.setSelectedSensorPosition(0);
     }
 
     public double getLeftPosition() {
         return getLeftPosition.getAsDouble();
     }
 
+    public double getLeftPositionMeters() {
+        return (getLeftPosition() / 4096) * Wheel.circumference;
+    }
+
     public double getRightPosition() {
         return getRightPosition.getAsDouble();
+    }
+
+    public double getRightPositionMeters() {
+        return (getRightPosition() / 4096) * Wheel.circumference;
     }
 
     public double getLeftVelocity() {
