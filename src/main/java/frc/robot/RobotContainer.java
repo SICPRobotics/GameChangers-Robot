@@ -38,9 +38,8 @@ public final class RobotContainer {
   private final OperatorController operatorController = new OperatorController(1);
   
   private final SubsystemContainer subs = new SubsystemContainer();
-  private final PiClient piClient = new PiClient();
-
-  private final Minitrue minitrue = new Minitrue(piClient);
+  private final Minitrue minitrue = new Minitrue();
+  private final PiClient piClient = new PiClient(minitrue);
  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.

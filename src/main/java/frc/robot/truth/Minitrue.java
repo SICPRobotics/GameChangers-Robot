@@ -13,9 +13,8 @@ import frc.robot.pi_client.VisionStatus;
  * The Ministry of Truth for our robot. It's the way that we'll be uniting the vision position data and odometry data, along with other things,
  * into one source of information. Name is a reference to 1984.
  */
-public class Minitrue implements VisionObserver {
+public class Minitrue {
 
-    private final PiClient piClient;
     private Truth truth;
 
     private final Listeners beforePoseSet = new Listeners();
@@ -36,9 +35,7 @@ public class Minitrue implements VisionObserver {
         return this;
     }
 
-    public Minitrue(PiClient piClient) {
-        this.piClient = piClient;
-        this.piClient.onVisionUpdate(this);
+    public Minitrue() {
         truth = new Truth();
         truth.odometry = new DifferentialDriveOdometry(new Rotation2d());
     }
