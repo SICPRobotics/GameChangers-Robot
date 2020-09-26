@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
@@ -84,11 +85,17 @@ public class PiClient {
 
     private void updateStatus(String newStatus) {
         try {
-            this.updateReader.readValue(newStatus);
+            JsonNode data = objectMapper.readTree(newStatus);
+            String type = data.get("type").asText("status");
+            JsonNode value = data.get("value");
+            if (type.equals("status")) {
+                this.updateReader.readValue(value);
+            }
+            
             //System.out.println("Got new status: " + newStatus);
 
             dispatchUpdates();
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             System.out.println("Error parsing JSON");
             e.printStackTrace();
         }
