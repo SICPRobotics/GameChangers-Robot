@@ -7,51 +7,20 @@
 
 package frc.robot;
 
-import java.util.function.DoubleSupplier;
+import java.util.Set;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AutonomusCommand;
-import frc.robot.commands.Calibrate;
-import frc.robot.commands.DoNothing;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DriveWithJoystick;
-//import frc.robot.commands.ExtendHangerArm;
-import frc.robot.commands.SetMotorContinuous;
-import frc.robot.commands.color_wheel.SpinNumberOfTimes;
-import frc.robot.commands.color_wheel.SpinToColor;
-import frc.robot.commands.ExtendPiston;
-import frc.robot.commands.NudgeMotor;
-import frc.robot.subsystems.Compessor;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.controllers.OperatorController;
+import frc.robot.pi_client.PiClient;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.controllers.OperatorController;
-import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.controllers.OperatorController;
-import frc.robot.subsystems.Cameras;
-import frc.robot.subsystems.ColorWheelPiston;
-import frc.robot.subsystems.ColorWheelSpinner;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.GroundIntake;
-import frc.robot.subsystems.Hanger;
-import frc.robot.subsystems.HangerArm;
-import frc.robot.subsystems.LeftWinch;
-import frc.robot.subsystems.PastaPuller;
-import frc.robot.subsystems.RightWinch;
-import frc.robot.subsystems.Gate;
-import frc.robot.commands.SetLightsToColor;
-import frc.robot.subsystems.Lights;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -66,28 +35,17 @@ public final class RobotContainer {
   private final Joystick joystick = new Joystick(0);
 
   private final OperatorController operatorController = new OperatorController(1);
-  private final DriveTrain driveTrain;
-  private final GroundIntake groundIntake;
-  private final Compessor compressor;
-  private final ColorWheelSpinner colorWheelSpinner;
-  private final HangerArm hangerArm;
-  private final Hanger hanger;
-  private final PastaPuller pastaPuller;
-  private final ColorWheelPiston colorWheelPiston;
-  private final Gate gate;
-  private final JoystickButton thumbButton;
-  // private final Cameras cameras;
-  private final Lights lights;
-  private final RightWinch rightWinch;
-  private final LeftWinch leftWinch;
-  private final Gyro gyro;
+  
+  private final SubsystemContainer subs = new SubsystemContainer();
+  private final PiClient piClient = new PiClient();
  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    driveTrain = new DriveTrain();
-    groundIntake = new GroundIntake();
+    subs.driveTrain = new DriveTrain();
+    subs.driveTrain.setDefaultCommand(new DriveWithJoystick(subs.driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust));
+    /*groundIntake = new GroundIntake();
     colorWheelSpinner = new ColorWheelSpinner();
     leftWinch = new LeftWinch();
     rightWinch = new RightWinch();
@@ -104,9 +62,10 @@ public final class RobotContainer {
     //cameras = new Cameras();
     hangerArm = new HangerArm();
     gyro = new ADXRS450_Gyro();
+    SmartDashboard.putNumber("Auton Chooser", 0);*/
+    
     // Configure the button bindings
     configureButtonBindings();  
-    SmartDashboard.putNumber("Auton Chooser", 0);
   }
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -115,7 +74,15 @@ public final class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    thumbButton.toggleWhenPressed(new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
+    JoystickButton button = new JoystickButton(joystick, 2);
+    button.whileHeld(new PIDCommand(
+      new PIDController(0.05, 0/*0.001*/, 0.020),
+      () -> (piClient.getVisionStatus().bbox.x),
+      320 / 2,
+      output -> subs.driveTrain.cheesyDrive(0, Math.abs(output) < 0.1 ? 0 : (- Math.min(Math.abs(output), 0.5) * Math.signum(output)), -1),
+      subs.driveTrain
+    ));
+    //thumbButton.toggleWhenPressed(new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
     //GROUND INTAKE
     //new Trigger(() -> operatorController.triggers.right.get() > 0.1).whileActiveContinuous(new Toggle(groundIntake));
     //groundIntake.setDefaultCommand(new SetMotorContinuous(groundIntake, operatorController.sticks.left::getY));
@@ -126,7 +93,7 @@ public final class RobotContainer {
     new SetMotorContinuous(groundIntake, () -> Math.signum(operatorController.sticks.left.getY()) * Constants.GroundIntake.SNAP_SPEED));
     */
 
-    //COLOR WHEEL
+    /*//COLOR WHEEL
     //Rotate to color / rotate a number of times
     operatorController.buttons.RB.toggleWhenPressed(new SpinNumberOfTimes(colorWheelSpinner));
     operatorController.buttons.LB.toggleWhenPressed(new SpinToColor(colorWheelSpinner));
@@ -177,12 +144,12 @@ public final class RobotContainer {
     /**
      * Blockers
      * These block the subsystems to keep other commands from using them
-     */
+     *//*
     Command blockIntakes = new RunCommand(() -> {}, groundIntake, pastaPuller).perpetually();
     
     /**
      * These commands run the subsystems.
-     */
+     *//*
     Command runLeftWinch = new RunCommand(() -> {
       double stickValue = operatorController.sticks.left.getY();
       leftWinch.setMotor(stickValue);
@@ -238,8 +205,8 @@ public final class RobotContainer {
 
     //GATE
     //operatorController.buttons.dPad.down.toggleWhenPressed(new FunctionalCommand(gate::extend, () -> { }, b -> gate.retract(), () -> false, gate));
-    new Trigger(() -> operatorController.triggers.left.get() > 0.1).toggleWhenActive(new ExtendPiston(gate));
-    new Trigger(gate::isUp).whileActiveContinuous(new SetLightsToColor(lights, Lights.LightsColor.ORANGE).perpetually());
+    //new Trigger(() -> operatorController.triggers.left.get() > 0.1).toggleWhenActive(new ExtendPiston(gate));
+    //new Trigger(gate::isUp).whileActiveContinuous(new SetLightsToColor(lights, Lights.LightsColor.ORANGE).perpetually());
   }
 
   public double getJoystickX() {
@@ -262,7 +229,15 @@ public final class RobotContainer {
   // * @return the command to run in autonomous
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new AutonomusCommand(driveTrain, gate, pastaPuller, hangerArm, gyro);
+    //return new AutonomusCommand(driveTrain, gate, pastaPuller, hangerArm, gyro);
+    return new Command(){
+    
+      @Override
+      public Set<Subsystem> getRequirements() {
+        // TODO Auto-generated method stub
+        return null;
+      }
+    };
   }
   
 }

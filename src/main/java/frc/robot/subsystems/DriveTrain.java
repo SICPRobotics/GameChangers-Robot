@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
 import frc.robot.Constants.Wheel;
+import frc.robot.pi_client.PiClient;
 
 /**
  * the DriveTrain, aka the thing that moves the robot
@@ -85,9 +86,11 @@ public final class DriveTrain extends SubsystemBaseWrapper {
      *                    given by the little flap thing on the bottom of the
      *                    joystick, Joystick rawAxis 3)
      */
-    public void cheesyDrive(final double moveValue, final double rotateValue, final double adjustValue) {
-        final double actualAdjustValue = ((-adjustValue + 1) / 2);
-        final double movevalue = Math.abs(moveValue) < Constants.CheesyDrive.Y_AXIS_DEADZONE_RANGE ? 0
+    public void cheesyDrive(final double moveValue, final double rotateValue, final double scaleValue) {
+        System.out.println("Attempted rotate " + rotateValue);
+        final double actualAdjustValue = ((-scaleValue + 1) / 2);
+        final double movevalue = Math.abs(moveValue) < Constants.CheesyDrive.Y_AXIS_DEADZONE_RANGE
+                ? 0
                 : moveValue * actualAdjustValue;
 
         // Deadzone on x axis only if y value is small
