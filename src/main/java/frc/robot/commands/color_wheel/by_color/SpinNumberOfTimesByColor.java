@@ -2,7 +2,6 @@ package frc.robot.commands.color_wheel.by_color;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.game_elements.ColorWheel;
-import frc.robot.game_elements.ColorWheel;
 import frc.robot.game_elements.ColorWheelColor;
 import frc.robot.subsystems.ColorWheelSpinner;
 

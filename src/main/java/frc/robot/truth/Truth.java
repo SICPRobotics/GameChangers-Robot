@@ -1,6 +1,5 @@
 package frc.robot.truth;
 
-import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 
 /**

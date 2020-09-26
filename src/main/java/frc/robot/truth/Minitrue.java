@@ -1,6 +1,5 @@
 package frc.robot.truth;
 
-import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;

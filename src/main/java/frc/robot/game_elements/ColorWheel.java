@@ -3,8 +3,6 @@ package frc.robot.game_elements;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import edu.wpi.first.wpilibj.util.Color;
-
 public class ColorWheel {
     public static ArrayList<ColorWheelColor> order = new ArrayList<ColorWheelColor>(Arrays.asList(new ColorWheelColor[]{
         ColorWheelColor.BLUE,

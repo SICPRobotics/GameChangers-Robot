@@ -1,7 +1,6 @@
 package frc.robot.controllers.buttons;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.Button;
 
 public class DPadButton extends Button {
