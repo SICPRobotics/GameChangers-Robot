@@ -21,6 +21,7 @@ import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
 import frc.robot.Constants.Wheel;
 import frc.robot.pi_client.PiClient;
+import frc.robot.truth.Minitrue;
 
 /**
  * the DriveTrain, aka the thing that moves the robot
@@ -38,14 +39,9 @@ public final class DriveTrain extends SubsystemBaseWrapper {
     private final DoubleSupplier getLeftVelocity;
     private final DoubleSupplier getRightPosition;
     private final DoubleSupplier getRightVelocity;
-    
-    private final double STARTING_POSITOIN_X = 1;
-    private final double STARTING_POSITOIN_Y = 1;
 
-    private DifferentialDriveOdometry differentialDriveOdometry;
-
-    public DriveTrain() {
-        super();
+    public DriveTrain(Minitrue minitrue) {
+        super(minitrue);
         // Motors
         frontRight.configFactoryDefault();
         frontRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 30);
@@ -71,7 +67,9 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         gyro.calibrate();
         gyro.reset();
         gyro.getAngle();
-        differentialDriveOdometry = new DifferentialDriveOdometry(new Rotation2d(getRotation()), new Pose2d(STARTING_POSITOIN_X, STARTING_POSITOIN_Y, new Rotation2d(getRotation())));
+
+        // Reset the encoders if the position is about to be reset
+        minitrue.beforePoseSet(truth -> resetDriveEncoders());
     }
 
     // Mostly taken from last year's robot
@@ -104,9 +102,9 @@ public final class DriveTrain extends SubsystemBaseWrapper {
     }
 
     public void periodic() {
-        SmartDashboard.putString("Pose 2D", differentialDriveOdometry.getPoseMeters().toString());
-        differentialDriveOdometry.update(new Rotation2d(getRotation()), (getLeftPosition.getAsDouble() / -7100) , (getRightPosition.getAsDouble() / 7100));
-        resetDriveEncoders();
+        Rotation2d gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
+        minitrue.updatePose(gyroAngle, this.getLeftPositionMeters(), this.getRightPositionMeters());
+
         SmartDashboard.putNumber("TalonSRX 0 (front right) Temperature", frontRight.getTemperature());
         SmartDashboard.putNumber("TalonSRX 1 (rear right) Temperature", rearRight.getTemperature());
         SmartDashboard.putNumber("TalonSRX 2 (rear left) Temperature", rearLeft.getTemperature());
@@ -134,9 +132,6 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         leftEncoder.setMaxPeriod(0.1);
         resetDriveEncoders();
     }*/
-    public Pose2d getPose() {
-        return differentialDriveOdometry.getPoseMeters();
-    }
 
     public void resetDriveEncoders(){
         frontRight.setSelectedSensorPosition(0);

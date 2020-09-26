@@ -21,6 +21,7 @@ import frc.robot.commands.DriveWithJoystick;
 import frc.robot.controllers.OperatorController;
 import frc.robot.pi_client.PiClient;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.truth.Minitrue;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -38,12 +39,14 @@ public final class RobotContainer {
   
   private final SubsystemContainer subs = new SubsystemContainer();
   private final PiClient piClient = new PiClient();
+
+  private final Minitrue minitrue = new Minitrue(piClient);
  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    subs.driveTrain = new DriveTrain();
+    subs.driveTrain = new DriveTrain(minitrue);
     subs.driveTrain.setDefaultCommand(new DriveWithJoystick(subs.driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust));
     /*groundIntake = new GroundIntake();
     colorWheelSpinner = new ColorWheelSpinner();
