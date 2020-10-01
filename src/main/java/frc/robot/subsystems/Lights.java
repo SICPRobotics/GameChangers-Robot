@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.SubsystemBaseWrapper;
+import frc.robot.truth.Minitrue;
 
 public final class Lights extends SubsystemBaseWrapper {
     private final Spark lightsFakeMotor;
@@ -44,8 +45,8 @@ public final class Lights extends SubsystemBaseWrapper {
         }
     }
 
-    public Lights() {
-        super();
+    public Lights(Minitrue minitrue) {
+        super(minitrue);
         lightsFakeMotor = new Spark(0);
     }
 

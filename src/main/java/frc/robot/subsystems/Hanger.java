@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Encoder;
 
 import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
+import frc.robot.truth.Minitrue;
 
 public final class Hanger extends SubsystemBaseWrapper implements MotorSubsystem {
    // private final TalonSRX armMotor;
@@ -15,8 +16,8 @@ public final class Hanger extends SubsystemBaseWrapper implements MotorSubsystem
     private final VictorSPX leftWinchMotor;
     //private final Encoder encoder;
 
-    public Hanger() {
-        super();
+    public Hanger(Minitrue minitrue) {
+        super(minitrue);
         
        // armMotor = new TalonSRX(Constants.Hanger.ARM_MOTOR_ID);
         rightWinchMotor = new VictorSPX(Constants.Hanger.RIGHT_WINCH_MOTOR_ID);

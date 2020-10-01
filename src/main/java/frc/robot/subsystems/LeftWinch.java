@@ -8,13 +8,14 @@ import edu.wpi.first.wpilibj.Encoder;
 
 import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
+import frc.robot.truth.Minitrue;
 
 public final class LeftWinch extends SubsystemBaseWrapper implements MotorSubsystem, ToggleSubsystem {
     // private final TalonSRX armMotor;
     private final VictorSPX leftWinchMotor;
 
-    public LeftWinch() {
-        super();
+    public LeftWinch(Minitrue minitrue) {
+        super(minitrue);
         leftWinchMotor = new VictorSPX(Constants.Hanger.LEFT_WINCH_MOTOR_ID);
     }
     public void start() {

@@ -18,6 +18,9 @@ package frc.robot;
  * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final class Wheel {
+        public static final double circumference = 0.200 * Math.PI; 
+    }
     public static final class GroundIntake {
         public static final int MOTOR_ID = 9;
         public static final double SPEED = 1.0;
@@ -102,5 +105,9 @@ public final class Constants {
         public static final int Y_AXIS = 1;
         public static final int Z_AXIS = 2;
         public static final int ADJUST_AXIS = 3;
+    }
+
+    public static final class PiClient {
+        public static final String uri = "ws://frcvision.local:5800";
     }
 }

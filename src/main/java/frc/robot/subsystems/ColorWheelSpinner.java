@@ -18,14 +18,15 @@ import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
 import frc.robot.game_elements.ColorWheel;
 import frc.robot.game_elements.ColorWheelColor;
+import frc.robot.truth.Minitrue;
 
 public final class ColorWheelSpinner extends SubsystemBaseWrapper implements MotorSubsystem, ToggleSubsystem {
     private final TalonSRX spinnerMotor = new TalonSRX(Constants.ColorWheel.MOTOR_ID);
     private final ColorMatch colorMatcher = new ColorMatch();
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
-    public ColorWheelSpinner() {
-        super();
+    public ColorWheelSpinner(Minitrue minitrue) {
+        super(minitrue);
 
         Arrays.stream(ColorWheelColor.values()).forEach(colorWheelColor -> {
             colorMatcher.addColorMatch(colorWheelColor.targetColor);
