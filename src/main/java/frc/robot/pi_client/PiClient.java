@@ -84,6 +84,7 @@ public class PiClient {
 
     private void updateStatus(String newStatus) {
         try {
+            System.out.println(newStatus);
             JsonNode data = objectMapper.readTree(newStatus);
             String type = data.get("type").asText("status");
             JsonNode value = data.get("value");

@@ -23,6 +23,28 @@ public class VisionStatus {
         }
     }
 
+    static public class Point {
+        public double x;
+        public double y;
+
+        @JsonCreator
+        public Point() {
+
+        }
+
+        public Point(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    @JsonCreator
+    public VisionStatus() {
+
+    }
+
+    @JsonMerge
+    public Point target;
     @JsonMerge
     public VisionRect bbox;
 }
