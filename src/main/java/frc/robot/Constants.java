@@ -19,7 +19,7 @@ package frc.robot;
  */
 public final class Constants {
     public static final class Wheel {
-        public static final double circumference = 0.200 * Math.PI; 
+        public static final double circumference = 0.600; //0.175 * Math.PI; 
     }
     public static final class GroundIntake {
         public static final int MOTOR_ID = 9;
