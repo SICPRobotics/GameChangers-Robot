@@ -48,6 +48,7 @@ public final class RobotContainer {
   public RobotContainer() {
     subs.driveTrain = new DriveTrain(minitrue);
     subs.driveTrain.setDefaultCommand(new DriveWithJoystick(subs.driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust));
+    subs.ultrasonic = new RangeFinder();
     /*groundIntake = new GroundIntake();
     colorWheelSpinner = new ColorWheelSpinner();
     leftWinch = new LeftWinch();
@@ -233,7 +234,7 @@ public final class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     //return new AutonomusCommand(driveTrain, gate, pastaPuller, hangerArm, gyro);
-    return new Command(){
+    return new DistanceCalibration(subs.driveTrain, subs.ultrasonic){
     
       @Override
       public Set<Subsystem> getRequirements() {

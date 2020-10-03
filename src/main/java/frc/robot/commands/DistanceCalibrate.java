@@ -18,14 +18,13 @@ public final class DistanceCalibrate extends CommandBase {
 
     @Override
     public void execute() {
-        drive.cheesyDrive(1, 0, 1);
-
+        drive.cheesyDrive(0.5, 0, 1);
     }
   
     @Override
     public boolean isFinished() 
     {
-        return (ultrasonic.getCmDistance() > 100);
+        return (ultrasonic.getCmDistance() > initialDistance + 100);
     }
     @Override
     public void end(final boolean interrupted) {
