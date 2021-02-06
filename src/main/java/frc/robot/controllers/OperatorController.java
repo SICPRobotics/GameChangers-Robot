@@ -1,8 +1,7 @@
 package frc.robot.controllers;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.XboxController;
 
 public class OperatorController {
     public final Buttons buttons;

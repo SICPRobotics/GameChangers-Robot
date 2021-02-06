@@ -45,7 +45,6 @@ public final class Lights extends SubsystemBaseWrapper {
     }
 
     public Lights() {
-        super();
         lightsFakeMotor = new Spark(0);
     }
 
