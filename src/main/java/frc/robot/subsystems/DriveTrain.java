@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.Wheel;
 import frc.robot.SubsystemBaseWrapper;
-import frc.robot.truth.Minitrue;
 
 /**
  * the DriveTrain, aka the thing that moves the robot
@@ -34,8 +33,8 @@ public final class DriveTrain extends SubsystemBaseWrapper {
     private final DoubleSupplier getRightPosition;
     private final DoubleSupplier getRightVelocity;
 
-    public DriveTrain(Minitrue minitrue) {
-        super(minitrue);
+    public DriveTrain() {
+        super();
         // Motors
         frontRight.configFactoryDefault();
         frontRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 30);
@@ -63,7 +62,7 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         gyro.getAngle();
 
         // Reset the encoders if the position is about to be reset
-        minitrue.beforePoseSet(truth -> resetDriveEncoders());
+        //minitrue.beforePoseSet(truth -> resetDriveEncoders());
     }
 
     // Mostly taken from last year's robot
@@ -97,7 +96,7 @@ public final class DriveTrain extends SubsystemBaseWrapper {
 
     public void periodic() {
         Rotation2d gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
-        minitrue.updatePose(gyroAngle, this.getLeftPositionMeters(), this.getRightPositionMeters());
+        //minitrue.updatePose(gyroAngle, this.getLeftPositionMeters(), this.getRightPositionMeters());
 
         SmartDashboard.putNumber("TalonSRX 0 (front right) Temperature", frontRight.getTemperature());
         SmartDashboard.putNumber("TalonSRX 1 (rear right) Temperature", rearRight.getTemperature());

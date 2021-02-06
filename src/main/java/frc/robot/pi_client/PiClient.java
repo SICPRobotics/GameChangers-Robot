@@ -13,7 +13,6 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import frc.robot.Constants;
-import frc.robot.truth.Minitrue;
 
 public class PiClient {
     static final ObjectMapper objectMapper = new ObjectMapper();
@@ -22,7 +21,7 @@ public class PiClient {
     private PiWebSocketClient socketClient;
     private VisionStatus status = new VisionStatus();
     private ObjectReader updateReader;
-    private final Minitrue minitrue;
+    //private final Minitrue minitrue;
 
     private class PiWebSocketClient extends WebSocketClient {
         public PiWebSocketClient(URI uri) {
@@ -54,8 +53,8 @@ public class PiClient {
         }
     }
 
-    public PiClient(Minitrue minitrue) {
-        this.minitrue = minitrue;
+    public PiClient() {
+        //this.minitrue = minitrue;
         this.updateReader = objectMapper.readerForUpdating(status);
         connect();
         /*new Thread(() -> {

@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
-import frc.robot.truth.Minitrue;
 
 public final class Hanger extends SubsystemBaseWrapper implements MotorSubsystem {
    // private final TalonSRX armMotor;
@@ -13,8 +12,8 @@ public final class Hanger extends SubsystemBaseWrapper implements MotorSubsystem
     private final VictorSPX leftWinchMotor;
     //private final Encoder encoder;
 
-    public Hanger(Minitrue minitrue) {
-        super(minitrue);
+    public Hanger() {
+        super();
         
        // armMotor = new TalonSRX(Constants.Hanger.ARM_MOTOR_ID);
         rightWinchMotor = new VictorSPX(Constants.Hanger.RIGHT_WINCH_MOTOR_ID);

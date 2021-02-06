@@ -6,12 +6,11 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.SubsystemBaseWrapper;
-import frc.robot.truth.Minitrue;
 
 public final class HangerArm extends SubsystemBaseWrapper implements MotorSubsystem {
     private final TalonSRX motor = new TalonSRX(5);
-    public HangerArm(Minitrue minitrue) {
-        super(minitrue);
+    public HangerArm() {
+        super();
         motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 30);
         motor.setSelectedSensorPosition(0);
     }

@@ -5,13 +5,12 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
-import frc.robot.truth.Minitrue;
 
 public final class RightWinch extends SubsystemBaseWrapper implements MotorSubsystem, ToggleSubsystem {
     private final VictorSPX rightWinchMotor;
 
-    public RightWinch(Minitrue minitrue) {
-        super(minitrue);
+    public RightWinch() {
+        super();
         rightWinchMotor = new VictorSPX(Constants.Hanger.RIGHT_WINCH_MOTOR_ID);
     }
     public void start() {
