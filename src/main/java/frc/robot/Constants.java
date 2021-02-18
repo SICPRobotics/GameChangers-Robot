@@ -81,7 +81,10 @@ public final class Constants {
         public static final double SPEED = -1;
         public static final double SNAP_SPEED = 0.5;
     }
-
+    public static final class Intake{
+        public static final int MOTOR_ID = 4;
+        public static final double SPEED = -1;
+    }
     public static final class Gate {
         public static final int FORWARD_SOLENOID_ID = 2;
         public static final int REVERSE_SOLENOID_ID = 3;
@@ -94,12 +97,22 @@ public final class Constants {
     }
 
     public final class DriveTrain {
-        public static final int FRONT_RIGHT_MOTOR_ID = 0;
-        public static final int FRONT_LEFT_MOTOR_ID = 3;
-        public static final int REAR_RIGHT_MOTOR_ID = 1;
-        public static final int REAR_LEFT_MOTOR_ID = 2;
+        public static final int FRONT_RIGHT_MOTOR_ID = 1;
+        public static final int FRONT_LEFT_MOTOR_ID = 2;
+        public static final int REAR_RIGHT_MOTOR_ID = 0;
+        public static final int REAR_LEFT_MOTOR_ID = 3;
+        public static final double COUNTS_PER_ROTAION = 4096;
+        public static final double WHEEL_CIRCUMFRANCE = 0.4787787204; // meters 24 1/4in(tentative) // 2021 robot 0.4787787204 // 2020 robot 0.61595
+        public static final double CHASIS_TRACK_WIDTH = 0.6858; // meters
     }
-
+    public final class VoltageConstants { // for 2020 robot update all constants in this class and the Drive Train class for new robot when possible
+        public static final double kS = 1.2;
+        public static final double kV = 2.57;
+        public static final double kA = 0.525;
+        public static final double TRACK_WIDTH = 0.7701078382789721;
+        public static final double kP = 2.49;
+        //r^2 = 0.998 kP = 2.49 <- in case needed later (will need Kp not r^2)
+    }
     public static final class Joystick {
         public static final int X_AXIS = 0;
         public static final int Y_AXIS = 1;
