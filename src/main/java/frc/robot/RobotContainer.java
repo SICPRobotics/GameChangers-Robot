@@ -42,7 +42,9 @@ import frc.robot.commands.DoNothing;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ExtendPiston;
 import frc.robot.commands.FlyWheelCommand;
+import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.MotorCommand;
 import frc.robot.commands.NudgeMotor;
 import frc.robot.commands.ResetPoistion;
 import frc.robot.commands.TurretTurn;
@@ -55,6 +57,7 @@ import frc.robot.controllers.OperatorController;
 // import frc.robot.subsystems.Compessor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.FlyWheel;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TrajectoryGeneration;
 import frc.robot.subsystems.Turret;
@@ -76,12 +79,14 @@ public final class RobotContainer {
   private final Intake intake;
   private final FlyWheel flyWheel;
   private final Turret turret;
+  private final Indexer indexer;
   private final JoystickButton thumbButton;
   private final JoystickButton twelveButton;
   private final JoystickButton trigger;
   private final JoystickButton threeButton;
   private final JoystickButton five;
   private final JoystickButton six;
+  private final JoystickButton eleven;
   // private final Cameras cameras;
   // private final Lights lights;
   // private final RightWinch rightWinch;
@@ -95,6 +100,7 @@ public final class RobotContainer {
     intake = new Intake();
     flyWheel = new FlyWheel();
     turret = new Turret();
+    indexer = new Indexer();
     trajectoryGeneration = new TrajectoryGeneration(driveTrain.getPose(),
         new Pose2d(new Translation2d(0, 2), new Rotation2d(Math.PI/2)), 
         List.of(new Translation2d(-1,1)), driveTrain);
@@ -106,6 +112,7 @@ public final class RobotContainer {
     threeButton = new JoystickButton(joystick, 3);
     five = new JoystickButton(joystick, 5);
     six = new JoystickButton(joystick, 6);
+    eleven = new JoystickButton(joystick, 11);
     // Configure the button bindings
     configureButtonBindings();
     SmartDashboard.putNumber("Auton Chooser", 0);
@@ -121,10 +128,11 @@ public final class RobotContainer {
     thumbButton.toggleWhenPressed(
         new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
     twelveButton.toggleWhenPressed(new ResetPoistion(driveTrain));
-    trigger.toggleWhenPressed(new IntakeCommand(intake));
-    threeButton.toggleWhenPressed(new FlyWheelCommand(flyWheel));
-    five.whenPressed(new TurretTurn(turret, 1));
-    six.whenPressed(new TurretTurn(turret, -1));
+    trigger.toggleWhenPressed(new MotorCommand(intake, 1));
+    threeButton.toggleWhenPressed(new MotorCommand(flyWheel, 1));
+    five.whenPressed(new MotorCommand(turret, 0.2));
+    six.whenPressed(new MotorCommand(turret, -0.2));
+    eleven.whenPressed(new MotorCommand(indexer, 0.2));
   }
   
   public double getJoystickX() {

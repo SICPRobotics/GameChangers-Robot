@@ -15,12 +15,12 @@ public final class FlyWheel extends SubsystemBaseWrapper implements MotorSubsyst
         motor = new TalonFX(10);
     }
     
-    public void startFly() {
-        setMotor(1);
+    public void turnOn(double velocity) {
+        setMotor(velocity);
         System.out.println("SetFly");
     }
 
-    public void stopFly() {
+    public void turnOff() {
         setMotor(0);
     }
 

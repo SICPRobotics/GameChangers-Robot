@@ -1,23 +1,18 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-
 import edu.wpi.first.wpilibj.VictorSP;
-import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
 
-public final class Turret extends SubsystemBaseWrapper implements MotorSubsystem {
+public class Indexer extends SubsystemBaseWrapper implements MotorSubsystem{
     private final VictorSP motor;
 
-    public Turret() {
+    public Indexer() {
         super();
-        
-        motor = new VictorSP(8);
+        motor = new VictorSP(7);
     }
     
     public void turnOn(double velocity) {
-        setMotor(0.2 *velocity);
+        setMotor(0.2);
     }
     public void turnOff(){
         setMotor(0);

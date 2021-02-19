@@ -13,13 +13,13 @@ public class IntakeCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        this.intake.startIntake();
+        this.intake.turnOn(1);
         System.out.println("STARTINTAKE");
     }
 
     @Override
     public void end(boolean interrupted) {
-        this.intake.stopIntake();
+        this.intake.turnOff();
     }
     @Override
     public boolean isFinished() {

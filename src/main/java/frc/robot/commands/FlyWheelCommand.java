@@ -13,13 +13,13 @@ public class FlyWheelCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        this.flyWheel.startFly();
+        this.flyWheel.turnOn(-1);
         System.out.println("SPIN UP");
     }
 
     @Override
     public void end(boolean interrupted) {
-        this.flyWheel.stopFly();
+        this.flyWheel.turnOff();
     }
     @Override
     public boolean isFinished() {

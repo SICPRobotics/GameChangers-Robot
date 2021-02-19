@@ -5,4 +5,6 @@ package frc.robot.subsystems;
  */
 public interface MotorSubsystem {
     public void setMotor(double value);
+    public void turnOn(double velocity);
+    public void turnOff();
 }

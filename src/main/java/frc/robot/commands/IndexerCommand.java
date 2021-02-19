@@ -1,25 +1,24 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Turret;
 
-public class TurretTurn extends CommandBase{
-    private final Turret turret;
-    private final double direction;
+public class IndexerCommand extends CommandBase{
+    private final Indexer indexer;
 
-    public TurretTurn(Turret turret, double direction) {
-        this.turret = turret;
-        this.direction = direction;
+    public IndexerCommand(Indexer indexer) {
+        this.indexer = indexer;
     }
 
     @Override
     public void initialize() {
-        this.turret.turnOn(direction);
+        this.indexer.turnOn(0.2);
     }
 
     @Override
     public void end(boolean interrupted) {
-        this.turret.turnOff();
+        this.indexer.turnOff();
     }
     @Override
     public boolean isFinished() {

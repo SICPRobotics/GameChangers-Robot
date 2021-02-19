@@ -16,13 +16,12 @@ public final class Intake extends SubsystemBaseWrapper implements MotorSubsystem
         motor = new TalonSRX(6);
     }
     
-    public void startIntake() {
-        setMotor(1);
+    public void turnOn(double velocity) {
+        setMotor(velocity);
         System.out.println("SetIntake");
-        System.out.println(motor.getMotorOutputVoltage());
     }
 
-    public void stopIntake() {
+    public void turnOff() {
         setMotor(0);
     }
 
