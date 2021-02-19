@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.VictorSP;
+import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
 
 public class Indexer extends SubsystemBaseWrapper implements MotorSubsystem{
@@ -8,7 +9,7 @@ public class Indexer extends SubsystemBaseWrapper implements MotorSubsystem{
 
     public Indexer() {
         super();
-        motor = new VictorSP(7);
+        motor = new VictorSP(Constants.MotorSubsystems.INDEXER_ID);
     }
     
     public void turnOn(double velocity) {

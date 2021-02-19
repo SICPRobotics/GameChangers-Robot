@@ -113,6 +113,12 @@ public final class Constants {
         public static final double kP = 2.49;
         //r^2 = 0.998 kP = 2.49 <- in case needed later (will need Kp not r^2)
     }
+    public final class MotorSubsystems{
+        public static final int FLYWHEEL_ID = 10;
+        public static final int INTAKE_ID = 6;
+        public static final int TURRET_ID = 9;
+        public static final int INDEXER_ID = 7;
+    }
     public static final class Joystick {
         public static final int X_AXIS = 0;
         public static final int Y_AXIS = 1;

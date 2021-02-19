@@ -12,7 +12,7 @@ public final class FlyWheel extends SubsystemBaseWrapper implements MotorSubsyst
     public FlyWheel() {
         super();
         
-        motor = new TalonFX(10);
+        motor = new TalonFX(Constants.MotorSubsystems.FLYWHEEL_ID);
     }
     
     public void turnOn(double velocity) {

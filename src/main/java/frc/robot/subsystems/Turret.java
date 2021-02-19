@@ -13,7 +13,7 @@ public final class Turret extends SubsystemBaseWrapper implements MotorSubsystem
     public Turret() {
         super();
         
-        motor = new VictorSP(8);
+        motor = new VictorSP(Constants.MotorSubsystems.TURRET_ID);
     }
     
     public void turnOn(double velocity) {

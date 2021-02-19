@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
-
 import frc.robot.Constants;
 import frc.robot.SubsystemBaseWrapper;
 
@@ -12,8 +10,7 @@ public final class Intake extends SubsystemBaseWrapper implements MotorSubsystem
 
     public Intake() {
         super();
-        
-        motor = new TalonSRX(6);
+        motor = new TalonSRX(Constants.MotorSubsystems.INTAKE_ID);
     }
     
     public void turnOn(double velocity) {
