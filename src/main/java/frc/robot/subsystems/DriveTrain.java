@@ -105,7 +105,7 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         SmartDashboard.putNumberArray("test Array", new double[2]);
         SmartDashboard.putNumber("Linear Velocity", getLinearVelocity());
         SmartDashboard.putNumber("Angular Velocity", getAngularVelocity());
-        System.out.println(this.getLeftDistanceMeters());
+        //System.out.println(this.getLeftDistanceMeters());
         //System.out.println(odometry.getPoseMeters().getTranslation().getX());
         //System.out.println(getRadians());
         //System.out.println(this.getPose().toString());

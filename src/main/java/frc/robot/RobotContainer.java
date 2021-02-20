@@ -57,6 +57,7 @@ import frc.robot.controllers.OperatorController;
 // import frc.robot.subsystems.Compessor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.FlyWheel;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TrajectoryGeneration;
@@ -80,6 +81,7 @@ public final class RobotContainer {
   private final FlyWheel flyWheel;
   private final Turret turret;
   private final Indexer indexer;
+  private final Hood hood;
   private final JoystickButton thumbButton;
   private final JoystickButton twelveButton;
   private final JoystickButton trigger;
@@ -87,6 +89,8 @@ public final class RobotContainer {
   private final JoystickButton five;
   private final JoystickButton six;
   private final JoystickButton eleven;
+  private final JoystickButton four;
+  private final JoystickButton ten;
   // private final Cameras cameras;
   // private final Lights lights;
   // private final RightWinch rightWinch;
@@ -101,6 +105,7 @@ public final class RobotContainer {
     flyWheel = new FlyWheel();
     turret = new Turret();
     indexer = new Indexer();
+    hood = new Hood();
     trajectoryGeneration = new TrajectoryGeneration(driveTrain.getPose(),
         new Pose2d(new Translation2d(0, 2), new Rotation2d(Math.PI/2)), 
         List.of(new Translation2d(-1,1)), driveTrain);
@@ -113,6 +118,8 @@ public final class RobotContainer {
     five = new JoystickButton(joystick, 5);
     six = new JoystickButton(joystick, 6);
     eleven = new JoystickButton(joystick, 11);
+    four = new JoystickButton(joystick, 4);
+    ten = new JoystickButton(joystick, 10);
     // Configure the button bindings
     configureButtonBindings();
     SmartDashboard.putNumber("Auton Chooser", 0);
@@ -128,11 +135,13 @@ public final class RobotContainer {
     thumbButton.toggleWhenPressed(
         new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
     twelveButton.toggleWhenPressed(new ResetPoistion(driveTrain));
-    trigger.toggleWhenPressed(new MotorCommand(intake, 1));
-    threeButton.toggleWhenPressed(new MotorCommand(flyWheel, 1));
+    trigger.toggleWhenPressed(new MotorCommand(flyWheel, 1));
+    threeButton.toggleWhenPressed(new MotorCommand(hood, -0.2));
     five.whenPressed(new MotorCommand(turret, 0.2));
     six.whenPressed(new MotorCommand(turret, -0.2));
-    eleven.whenPressed(new MotorCommand(indexer, 0.2));
+    eleven.toggleWhenPressed(new MotorCommand(indexer, 0.2));
+    four.whenPressed(new MotorCommand(hood, 0.2));
+    ten.toggleWhenPressed(new MotorCommand(intake, -0.6));
   }
   
   public double getJoystickX() {
