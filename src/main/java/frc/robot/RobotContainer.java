@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -60,6 +61,7 @@ import frc.robot.subsystems.FlyWheel;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ShooterLights;
 import frc.robot.subsystems.TrajectoryGeneration;
 import frc.robot.subsystems.Turret;
 
@@ -82,6 +84,7 @@ public final class RobotContainer {
   private final Turret turret;
   private final Indexer indexer;
   private final Hood hood;
+  private final ShooterLights shooterLights;
   private final JoystickButton thumbButton;
   private final JoystickButton twelveButton;
   private final JoystickButton trigger;
@@ -106,6 +109,7 @@ public final class RobotContainer {
     turret = new Turret();
     indexer = new Indexer();
     hood = new Hood();
+    shooterLights = new ShooterLights();
     trajectoryGeneration = new TrajectoryGeneration(driveTrain.getPose(),
         new Pose2d(new Translation2d(0, 2), new Rotation2d(Math.PI/2)), 
         List.of(new Translation2d(-1,1)), driveTrain);
@@ -132,7 +136,7 @@ public final class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    thumbButton.toggleWhenPressed(
+    /*thumbButton.toggleWhenPressed(
         new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
     twelveButton.toggleWhenPressed(new ResetPoistion(driveTrain));
     trigger.toggleWhenPressed(new MotorCommand(flyWheel, 1));
@@ -141,7 +145,8 @@ public final class RobotContainer {
     six.whenPressed(new MotorCommand(turret, -0.2));
     eleven.toggleWhenPressed(new MotorCommand(indexer, 0.2));
     four.whenPressed(new MotorCommand(hood, 0.2));
-    ten.toggleWhenPressed(new MotorCommand(intake, -0.6));
+    ten.toggleWhenPressed(new MotorCommand(intake, -0.6));*/
+    trigger.whileHeld(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
   }
   
   public double getJoystickX() {
