@@ -73,117 +73,117 @@ import frc.robot.subsystems.Turret;
  * commands, and button mappings) should be declared here.
  */
 public final class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+    // The robot's subsystems and commands are defined here...
 
-  private final Joystick joystick = new Joystick(0);
-  private final OperatorController operatorController = new OperatorController(1);
-  private final DriveTrain driveTrain;
-  private final TrajectoryGeneration trajectoryGeneration;
-  private final Intake intake;
-  private final FlyWheel flyWheel;
-  private final Turret turret;
-  private final Indexer indexer;
-  private final Hood hood;
-  private final ShooterLights shooterLights;
-  private final JoystickButton thumbButton;
-  private final JoystickButton twelveButton;
-  private final JoystickButton trigger;
-  private final JoystickButton threeButton;
-  private final JoystickButton five;
-  private final JoystickButton six;
-  private final JoystickButton eleven;
-  private final JoystickButton four;
-  private final JoystickButton ten;
-  // private final Cameras cameras;
-  // private final Lights lights;
-  // private final RightWinch rightWinch;
-  // private final LeftWinch leftWinch;
+    private final Joystick joystick = new Joystick(0);
+    private final OperatorController operatorController = new OperatorController(1);
+    private final DriveTrain driveTrain;
+    private final TrajectoryGeneration trajectoryGeneration;
+    private final Intake intake;
+    private final FlyWheel flyWheel;
+    private final Turret turret;
+    private final Indexer indexer;
+    private final Hood hood;
+    private final ShooterLights shooterLights;
+    private final JoystickButton thumbButton;
+    private final JoystickButton twelveButton;
+    private final JoystickButton trigger;
+    private final JoystickButton threeButton;
+    private final JoystickButton five;
+    private final JoystickButton six;
+    private final JoystickButton eleven;
+    private final JoystickButton four;
+    private final JoystickButton ten;
+    // private final Cameras cameras;
+    // private final Lights lights;
+    // private final RightWinch rightWinch;
+    // private final LeftWinch leftWinch;
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
-  public RobotContainer() {
-    driveTrain = new DriveTrain();
-    intake = new Intake();
-    flyWheel = new FlyWheel();
-    turret = new Turret();
-    indexer = new Indexer();
-    hood = new Hood();
-    shooterLights = new ShooterLights();
-    trajectoryGeneration = new TrajectoryGeneration(driveTrain.getPose(),
-        new Pose2d(new Translation2d(0, 2), new Rotation2d(Math.PI/2)), 
-        List.of(new Translation2d(-1,1)), driveTrain);
-    driveTrain.setDefaultCommand(
-        new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust));
-    thumbButton = new JoystickButton(joystick, 2);
-    twelveButton = new JoystickButton(joystick, 12);
-    trigger = new JoystickButton(joystick, 1);
-    threeButton = new JoystickButton(joystick, 3);
-    five = new JoystickButton(joystick, 5);
-    six = new JoystickButton(joystick, 6);
-    eleven = new JoystickButton(joystick, 11);
-    four = new JoystickButton(joystick, 4);
-    ten = new JoystickButton(joystick, 10);
-    // Configure the button bindings
-    configureButtonBindings();
-    SmartDashboard.putNumber("Auton Chooser", 0);
-  }
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        driveTrain = new DriveTrain();
+        intake = new Intake();
+        flyWheel = new FlyWheel();
+        turret = new Turret();
+        indexer = new Indexer();
+        hood = new Hood();
+        shooterLights = new ShooterLights();
+        trajectoryGeneration = new TrajectoryGeneration(driveTrain.getPose(),
+            new Pose2d(new Translation2d(0, 2), new Rotation2d(Math.PI/2)), 
+            List.of(new Translation2d(-1,1)), driveTrain);
+        driveTrain.setDefaultCommand(
+            new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust));
+        thumbButton = new JoystickButton(joystick, 2);
+        twelveButton = new JoystickButton(joystick, 12);
+        trigger = new JoystickButton(joystick, 1);
+        threeButton = new JoystickButton(joystick, 3);
+        five = new JoystickButton(joystick, 5);
+        six = new JoystickButton(joystick, 6);
+        eleven = new JoystickButton(joystick, 11);
+        four = new JoystickButton(joystick, 4);
+        ten = new JoystickButton(joystick, 10);
+        // Configure the button bindings
+        configureButtonBindings();
+        SmartDashboard.putNumber("Auton Chooser", 0);
+    }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by instantiating a {@link GenericHID} or one of its subclasses
-   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
-    /*thumbButton.toggleWhenPressed(
-        new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
-    twelveButton.toggleWhenPressed(new ResetPoistion(driveTrain));
-    trigger.toggleWhenPressed(new MotorCommand(flyWheel, 1));
-    threeButton.toggleWhenPressed(new MotorCommand(hood, -0.2));
-    five.whenPressed(new MotorCommand(turret, 0.2));
-    six.whenPressed(new MotorCommand(turret, -0.2));
-    eleven.toggleWhenPressed(new MotorCommand(indexer, 0.2));
-    four.whenPressed(new MotorCommand(hood, 0.2));
-    ten.toggleWhenPressed(new MotorCommand(intake, -0.6));*/
-    trigger.whileHeld(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
-  }
-  
-  public double getJoystickX() {
-    return this.joystick.getRawAxis(Constants.Joystick.X_AXIS);
-  }
+    /**
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by instantiating a {@link GenericHID} or one of its subclasses
+     * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+     * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
+    private void configureButtonBindings() {
+        /*thumbButton.toggleWhenPressed(
+            new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
+        twelveButton.toggleWhenPressed(new ResetPoistion(driveTrain));
+        trigger.toggleWhenPressed(new MotorCommand(flyWheel, 1));
+        threeButton.toggleWhenPressed(new MotorCommand(hood, -0.2));
+        five.whenPressed(new MotorCommand(turret, 0.2));
+        six.whenPressed(new MotorCommand(turret, -0.2));
+        eleven.toggleWhenPressed(new MotorCommand(indexer, 0.2));
+        four.whenPressed(new MotorCommand(hood, 0.2));
+        ten.toggleWhenPressed(new MotorCommand(intake, -0.6));*/
+        trigger.whileHeld(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
+    }
+    
+    public double getJoystickX() {
+        return this.joystick.getRawAxis(Constants.Joystick.X_AXIS);
+    }
 
-  public double getJoystickY() {
-    return this.joystick.getRawAxis(Constants.Joystick.Y_AXIS);
-  }
+    public double getJoystickY() {
+        return this.joystick.getRawAxis(Constants.Joystick.Y_AXIS);
+    }
 
-  public double getJoystickZ() {
-    return this.joystick.getRawAxis(2);
-  }
+    public double getJoystickZ() {
+        return this.joystick.getRawAxis(2);
+    }
 
-  public double getJoystickAdjust() {
-    return this.joystick.getRawAxis(Constants.Joystick.ADJUST_AXIS);
-  }
-  public void generateTrajectory(){
-    trajectoryGeneration.generateTrajectory();
-  }
-  // * @return the command to run in autonomous
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    //return new AutonomusCommand(driveTrain, gate, pastaPuller, hangerArm);
-    //PLAN: subsystem to generate trajectory, brings in the tragectory into here and those paramiters, kiniatics is handledd by DriveTrain, 
-    //Ramsete Command will be made Here and this method will just return that. 
-    return new RamseteCommand(
-    trajectoryGeneration.getTrajectory(),
-     driveTrain::getPose,
-      new RamseteController(),
-       new SimpleMotorFeedforward(Constants.VoltageConstants.kS,Constants.VoltageConstants.kV,Constants.VoltageConstants.kA),
-        driveTrain.kinematics,
-         driveTrain::getWheelSpeeds,
-         new PIDController(Constants.VoltageConstants.kP, 0, 0), 
-          new PIDController(Constants.VoltageConstants.kP, 0, 0),
-           driveTrain.tankDriveVolts,
-            driveTrain);
-  }
-  
+    public double getJoystickAdjust() {
+        return this.joystick.getRawAxis(Constants.Joystick.ADJUST_AXIS);
+    }
+    public void generateTrajectory(){
+        trajectoryGeneration.generateTrajectory();
+    }
+    // * @return the command to run in autonomous
+    public Command getAutonomousCommand() {
+        // An ExampleCommand will run in autonomous
+        //return new AutonomusCommand(driveTrain, gate, pastaPuller, hangerArm);
+        //PLAN: subsystem to generate trajectory, brings in the tragectory into here and those paramiters, kiniatics is handledd by DriveTrain, 
+        //Ramsete Command will be made Here and this method will just return that. 
+        return new RamseteCommand(
+        trajectoryGeneration.getTrajectory(),
+        driveTrain::getPose,
+          new RamseteController(),
+          new SimpleMotorFeedforward(Constants.VoltageConstants.kS,Constants.VoltageConstants.kV,Constants.VoltageConstants.kA),
+            driveTrain.kinematics,
+            driveTrain::getWheelSpeeds,
+            new PIDController(Constants.VoltageConstants.kP, 0, 0), 
+              new PIDController(Constants.VoltageConstants.kP, 0, 0),
+              driveTrain.tankDriveVolts,
+                driveTrain);
+    }
+    
 }
