@@ -174,15 +174,15 @@ public final class RobotContainer {
         //PLAN: subsystem to generate trajectory, brings in the tragectory into here and those paramiters, kiniatics is handledd by DriveTrain, 
         //Ramsete Command will be made Here and this method will just return that. 
         return new RamseteCommand(
-        trajectoryGeneration.getTrajectory(),
-        driveTrain::getPose,
-          new RamseteController(),
-          new SimpleMotorFeedforward(Constants.VoltageConstants.kS,Constants.VoltageConstants.kV,Constants.VoltageConstants.kA),
-            driveTrain.kinematics,
-            driveTrain::getWheelSpeeds,
-            new PIDController(Constants.VoltageConstants.kP, 0, 0), 
-              new PIDController(Constants.VoltageConstants.kP, 0, 0),
-              driveTrain.tankDriveVolts,
+                AutoTrajectory.load(), //trajectoryGeneration.getTrajectory(),
+                driveTrain::getPose,
+                new RamseteController(),
+                new SimpleMotorFeedforward(Constants.VoltageConstants.kS, Constants.VoltageConstants.kV, Constants.VoltageConstants.kA),
+                driveTrain.kinematics,
+                driveTrain::getWheelSpeeds,
+                new PIDController(Constants.VoltageConstants.kP, 0, 0), 
+                new PIDController(Constants.VoltageConstants.kP, 0, 0),
+                driveTrain.tankDriveVolts,
                 driveTrain);
     }
     
