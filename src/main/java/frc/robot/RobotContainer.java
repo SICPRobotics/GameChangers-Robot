@@ -152,15 +152,12 @@ public final class RobotContainer {
     public double getJoystickX() {
         return this.joystick.getRawAxis(Constants.Joystick.X_AXIS);
     }
-
     public double getJoystickY() {
         return this.joystick.getRawAxis(Constants.Joystick.Y_AXIS);
     }
-
     public double getJoystickZ() {
         return this.joystick.getRawAxis(2);
     }
-
     public double getJoystickAdjust() {
         return this.joystick.getRawAxis(Constants.Joystick.ADJUST_AXIS);
     }
@@ -173,8 +170,10 @@ public final class RobotContainer {
         //return new AutonomusCommand(driveTrain, gate, pastaPuller, hangerArm);
         //PLAN: subsystem to generate trajectory, brings in the tragectory into here and those paramiters, kiniatics is handledd by DriveTrain, 
         //Ramsete Command will be made Here and this method will just return that. 
-        return new RamseteCommand(
-                AutoTrajectory.load(), //trajectoryGeneration.getTrajectory(),
+        return new FunctionalCommand(() -> flyWheel.turnOn(-1), () -> {}, (b) -> {}, () -> true, flyWheel).alongWith(
+               new FunctionalCommand(() -> intake.turnOn(-1), () -> {}, (b) -> {}, () -> true, intake)).andThen( 
+               new RamseteCommand(
+                trajectoryGeneration.getTrajectory(),
                 driveTrain::getPose,
                 new RamseteController(),
                 new SimpleMotorFeedforward(Constants.VoltageConstants.kS, Constants.VoltageConstants.kV, Constants.VoltageConstants.kA),
@@ -183,7 +182,7 @@ public final class RobotContainer {
                 new PIDController(Constants.VoltageConstants.kP, 0, 0), 
                 new PIDController(Constants.VoltageConstants.kP, 0, 0),
                 driveTrain.tankDriveVolts,
-                driveTrain);
+                driveTrain));
     }
     
 }
