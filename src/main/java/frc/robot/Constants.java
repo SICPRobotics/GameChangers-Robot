@@ -109,7 +109,7 @@ public final class Constants {
         public static final double kS = 1.2;
         public static final double kV = 2.57;
         public static final double kA = 0.525;
-        public static final double TRACK_WIDTH = 0.7701078382789721;
+        public static final double TRACK_WIDTH = 0.5842;//0.7701078382789721;
         public static final double kP = 2.49;
         //r^2 = 0.998 kP = 2.49 <- in case needed later (will need Kp not r^2)
     }

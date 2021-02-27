@@ -11,7 +11,7 @@ public class Hood extends SubsystemBaseWrapper implements MotorSubsystem {
 
     @Override
     public void turnOn(double velocity) {
-        setMotor(velocity);
+        setMotor(velocity * 0.1);
     }
     @Override
     public void turnOff() {

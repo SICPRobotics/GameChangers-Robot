@@ -61,6 +61,7 @@ import frc.robot.subsystems.FlyWheel;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.MotorSubsystem;
 import frc.robot.subsystems.ShooterLights;
 import frc.robot.subsystems.TrajectoryGeneration;
 import frc.robot.subsystems.Turret;
@@ -74,7 +75,6 @@ import frc.robot.subsystems.Turret;
  */
 public final class RobotContainer {
     // The robot's subsystems and commands are defined here...
-
     private final Joystick joystick = new Joystick(0);
     private final OperatorController operatorController = new OperatorController(1);
     private final DriveTrain driveTrain;
@@ -94,6 +94,7 @@ public final class RobotContainer {
     private final JoystickButton eleven;
     private final JoystickButton four;
     private final JoystickButton ten;
+    private final JoystickButton nine;
     // private final Cameras cameras;
     // private final Lights lights;
     // private final RightWinch rightWinch;
@@ -112,7 +113,7 @@ public final class RobotContainer {
         shooterLights = new ShooterLights();
         trajectoryGeneration = new TrajectoryGeneration(driveTrain.getPose(),
             new Pose2d(new Translation2d(0, 2), new Rotation2d(Math.PI/2)), 
-            List.of(new Translation2d(-1,1)), driveTrain);
+            List.of(new Translation2d(0,1)), driveTrain);
         driveTrain.setDefaultCommand(
             new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust));
         thumbButton = new JoystickButton(joystick, 2);
@@ -124,6 +125,7 @@ public final class RobotContainer {
         eleven = new JoystickButton(joystick, 11);
         four = new JoystickButton(joystick, 4);
         ten = new JoystickButton(joystick, 10);
+        nine = new JoystickButton(joystick, 9);
         // Configure the button bindings
         configureButtonBindings();
         SmartDashboard.putNumber("Auton Chooser", 0);
@@ -138,7 +140,6 @@ public final class RobotContainer {
     private void configureButtonBindings() {
         /*thumbButton.toggleWhenPressed(
             new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
-        twelveButton.toggleWhenPressed(new ResetPoistion(driveTrain));
         trigger.toggleWhenPressed(new MotorCommand(flyWheel, 1));
         threeButton.toggleWhenPressed(new MotorCommand(hood, -0.2));
         five.whenPressed(new MotorCommand(turret, 0.2));
@@ -146,9 +147,27 @@ public final class RobotContainer {
         eleven.toggleWhenPressed(new MotorCommand(indexer, 0.2));
         four.whenPressed(new MotorCommand(hood, 0.2));
         ten.toggleWhenPressed(new MotorCommand(intake, -0.6));*/
-        trigger.whileHeld(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
+        //trigger.whileHeld(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
+        //threeButton.whileHeld(new FunctionalCommand(() -> hood.turnOn(0.5), () -> {}, (b) -> hood.turnOff(), () -> false, hood));
+        //four.whileHeld(new FunctionalCommand(() -> hood.turnOn(-0.5), () -> {}, (b) -> hood.turnOff(), () -> false, hood));
+        twelveButton.whileHeld(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
+        nine.toggleWhenPressed(new ResetPoistion(driveTrain));
+        motorSubsystemButton(threeButton, hood, 0.5, false);
+        motorSubsystemButton(four, hood, -0.5, false);
+        motorSubsystemButton(five, turret, 0.5, false);
+        motorSubsystemButton(six, turret, -0.5, false);
+        motorSubsystemButton(trigger, flyWheel, 1, true);
+        motorSubsystemButton(ten, intake, 0.5, true);
+        motorSubsystemButton(eleven, indexer, 0.5, true);
     }
-    
+    public void motorSubsystemButton(JoystickButton jB, MotorSubsystem subsystem, double velocity, boolean toggle){
+      if(toggle){
+        jB.toggleWhenPressed(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
+      }
+      else{
+        jB.whileHeld(new FunctionalCommand(() -> subsystem.turnOn(velocity), () -> {}, (b) -> subsystem.turnOff(), () -> false, subsystem));
+      }   
+    }
     public double getJoystickX() {
         return this.joystick.getRawAxis(Constants.Joystick.X_AXIS);
     }
@@ -161,18 +180,28 @@ public final class RobotContainer {
     public double getJoystickAdjust() {
         return this.joystick.getRawAxis(Constants.Joystick.ADJUST_AXIS);
     }
-    public void generateTrajectory(){
-        trajectoryGeneration.generateTrajectory();
+    public void generateTrajectory(boolean generate){
+        if(generate){
+          trajectoryGeneration.generateTrajectory();
+        }
+        else{
+
+        }
     }
+    // public void trajectory(TrajectoryGeneration trajectoryGeneration, DriveTrain driveTrain, Pose2d ){
+    //   trajectoryGeneration = new TrajectoryGeneration(driveTrain.getPose(),
+    //         new Pose2d(new Translation2d(0, 2), new Rotation2d(Math.PI/2)), 
+    //         List.of(new Translation2d(0,1)), driveTrain);
+    // }
     // * @return the command to run in autonomous
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         //return new AutonomusCommand(driveTrain, gate, pastaPuller, hangerArm);
         //PLAN: subsystem to generate trajectory, brings in the tragectory into here and those paramiters, kiniatics is handledd by DriveTrain, 
         //Ramsete Command will be made Here and this method will just return that. 
-        return new FunctionalCommand(() -> flyWheel.turnOn(-1), () -> {}, (b) -> {}, () -> true, flyWheel).alongWith(
-               new FunctionalCommand(() -> intake.turnOn(-1), () -> {}, (b) -> {}, () -> true, intake)).andThen( 
-               new RamseteCommand(
+        return //new FunctionalCommand(() -> flyWheel.turnOn(-1), () -> {}, (b) -> {}, () -> true, flyWheel).alongWith(
+               //new FunctionalCommand(() -> intake.turnOn(-1), () -> {}, (b) -> {}, () -> true, intake)).andThen( 
+               (new RamseteCommand(
                 trajectoryGeneration.getTrajectory(),
                 driveTrain::getPose,
                 new RamseteController(),
