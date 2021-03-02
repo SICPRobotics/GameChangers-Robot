@@ -112,8 +112,20 @@ public final class RobotContainer {
         hood = new Hood();
         shooterLights = new ShooterLights();
         trajectoryGeneration = new TrajectoryGeneration(driveTrain.getPose(),
-            new Pose2d(new Translation2d(0, 2), new Rotation2d(Math.PI/2)), 
-            List.of(new Translation2d(0,1)), driveTrain);
+            new Pose2d(new Translation2d(-2, 0), new Rotation2d(Math.PI)), 
+            List.of( 
+            new Translation2d(-1,2),
+            new Translation2d(-2,2), 
+            new Translation2d(-2,6),
+            new Translation2d(0,6),
+            new Translation2d(-1,8),
+            new Translation2d(-2,6),
+            new Translation2d(0,6),
+            new Translation2d(0,1.5),
+            new Translation2d(-2,1.5)
+            ),
+             driveTrain);
+        trajectoryGeneration.generateTrajectory();
         driveTrain.setDefaultCommand(
             new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust));
         thumbButton = new JoystickButton(joystick, 2);

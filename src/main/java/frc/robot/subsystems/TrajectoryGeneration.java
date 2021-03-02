@@ -27,7 +27,7 @@ public final class TrajectoryGeneration extends SubsystemBaseWrapper {
         this.wayPoints = wayPoints;
         this.driveTrain = subsystem;
         this.generated = false;
-        trajectoryConfig = new TrajectoryConfig(4, 2); //max v and a 4m/s and 4m/s^2 respectivly dosen't really matter right now but can fine tune it later
+        trajectoryConfig = new TrajectoryConfig(1, 0.5); //max v and a 4m/s and 4m/s^2 respectivly dosen't really matter right now but can fine tune it later
         // trajectoryConfig.addConstraint(
         //     new DifferentialDriveVoltageConstraint(
         //         new SimpleMotorFeedforward(
