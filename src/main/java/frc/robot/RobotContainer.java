@@ -57,6 +57,7 @@ import frc.robot.controllers.OperatorController;
 // import frc.robot.subsystems.ColorWheelPiston;
 // import frc.robot.subsystems.Compessor;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.FlyWheel;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
@@ -84,6 +85,7 @@ public final class RobotContainer {
     private final Turret turret;
     private final Indexer indexer;
     private final Hood hood;
+    private final Feeder feeder;
     private final ShooterLights shooterLights;
     private final JoystickButton thumbButton;
     private final JoystickButton twelveButton;
@@ -95,6 +97,7 @@ public final class RobotContainer {
     private final JoystickButton four;
     private final JoystickButton ten;
     private final JoystickButton nine;
+    private final JoystickButton eight;
     // private final Cameras cameras;
     // private final Lights lights;
     // private final RightWinch rightWinch;
@@ -110,6 +113,7 @@ public final class RobotContainer {
         turret = new Turret();
         indexer = new Indexer();
         hood = new Hood();
+        feeder = new Feeder();
         shooterLights = new ShooterLights();
         trajectoryGeneration = new TrajectoryGeneration(driveTrain.getPose(),
             new Pose2d(new Translation2d(-2, 0), new Rotation2d(Math.PI)), 
@@ -138,6 +142,7 @@ public final class RobotContainer {
         four = new JoystickButton(joystick, 4);
         ten = new JoystickButton(joystick, 10);
         nine = new JoystickButton(joystick, 9);
+        eight = new JoystickButton(joystick, 8);
         // Configure the button bindings
         configureButtonBindings();
         SmartDashboard.putNumber("Auton Chooser", 0);
@@ -171,6 +176,7 @@ public final class RobotContainer {
         motorSubsystemButton(trigger, flyWheel, 1, true);
         motorSubsystemButton(ten, intake, 0.5, true);
         motorSubsystemButton(eleven, indexer, 0.5, true);
+        motorSubsystemButton(eight, feeder, 0.5, true);
     }
     public void motorSubsystemButton(JoystickButton jB, MotorSubsystem subsystem, double velocity, boolean toggle){
       if(toggle){
