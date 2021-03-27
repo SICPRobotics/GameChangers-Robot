@@ -85,7 +85,11 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         right.setVoltage(-rightVolts);
         this.robotDrive.feed();
     };
-
+    public void voltDrive(double leftVolts, double rightVolts){
+        left.setVoltage(leftVolts);
+        right.setVoltage(-rightVolts);
+        this.robotDrive.feed();
+    }
     // public void tankDriveVolts(Double leftVolts, Double rightVolts){
     //     left.setVoltage(leftVolts);
     //     right.setVoltage(-rightVolts);
@@ -100,11 +104,13 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         SmartDashboard.putNumber("TalonSRX 3 (front left) Temperature", frontLeft.getTemperature());
         SmartDashboard.putNumber("Front Right Motor Position", ((double)(frontRight.getSelectedSensorPosition()) / Constants.DriveTrain.COUNTS_PER_ROTAION) * Constants.DriveTrain.WHEEL_CIRCUMFRANCE); // 4096 per rotation 8pi circumfrance
         SmartDashboard.putNumber("Front Left Motor Position", ((double)(frontLeft.getSelectedSensorPosition()) / Constants.DriveTrain.COUNTS_PER_ROTAION) * Constants.DriveTrain.WHEEL_CIRCUMFRANCE);
-        SmartDashboard.putNumber("Front Right Motor Velocity", ((double)(frontRight.getSelectedSensorVelocity()) / Constants.DriveTrain.COUNTS_PER_ROTAION) * Constants.DriveTrain.WHEEL_CIRCUMFRANCE);
-        SmartDashboard.putNumber("Front Left Motor Velocity", ((double)(frontLeft.getSelectedSensorVelocity()) / Constants.DriveTrain.COUNTS_PER_ROTAION) * Constants.DriveTrain.WHEEL_CIRCUMFRANCE);
+        SmartDashboard.putNumber("Front Right Motor Velocity", ((double)(frontRight.getSelectedSensorVelocity()) / Constants.DriveTrain.COUNTS_PER_ROTAION) * Constants.DriveTrain.WHEEL_CIRCUMFRANCE * 10);
+        SmartDashboard.putNumber("Front Left Motor Velocity", ((double)(frontLeft.getSelectedSensorVelocity()) / Constants.DriveTrain.COUNTS_PER_ROTAION) * Constants.DriveTrain.WHEEL_CIRCUMFRANCE * 10);
         SmartDashboard.putNumberArray("test Array", new double[2]);
         SmartDashboard.putNumber("Linear Velocity", getLinearVelocity());
         SmartDashboard.putNumber("Angular Velocity", getAngularVelocity());
+        SmartDashboard.putNumber("Front Left Motor Volts", getLeftVolts());
+        SmartDashboard.putNumber("Front Right Motor Volts", getRightVolts());
         //System.out.println(this.getLeftDistanceMeters());
         //System.out.println(odometry.getPoseMeters().getTranslation().getX());
         //System.out.println(getRadians());
@@ -118,10 +124,16 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         return ((double)(-frontLeft.getSelectedSensorPosition()) / Constants.DriveTrain.COUNTS_PER_ROTAION) * Constants.DriveTrain.WHEEL_CIRCUMFRANCE;
     }
     public double getRightVelocityMeters(){
-        return ((double)(frontRight.getSelectedSensorVelocity()) / Constants.DriveTrain.COUNTS_PER_ROTAION) * Constants.DriveTrain.WHEEL_CIRCUMFRANCE;
+        return ((double)(frontRight.getSelectedSensorVelocity()) / Constants.DriveTrain.COUNTS_PER_ROTAION) * Constants.DriveTrain.WHEEL_CIRCUMFRANCE * 10;
     }
     public double getLeftVelocityMeters(){
-        return ((double)(-frontLeft.getSelectedSensorVelocity()) / Constants.DriveTrain.COUNTS_PER_ROTAION) * Constants.DriveTrain.WHEEL_CIRCUMFRANCE;
+        return ((double)(-frontLeft.getSelectedSensorVelocity()) / Constants.DriveTrain.COUNTS_PER_ROTAION) * Constants.DriveTrain.WHEEL_CIRCUMFRANCE * 10;
+    }
+    public double getRightVolts(){
+        return frontRight.getMotorOutputVoltage();
+    }
+    public double getLeftVolts(){
+        return frontLeft.getMotorOutputVoltage();
     }
     public double getRadians(){
         return Math.toRadians(-gyro.getAngle());

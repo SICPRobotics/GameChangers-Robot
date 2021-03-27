@@ -8,17 +8,11 @@
 package frc.robot;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 
-import javax.swing.plaf.TextUI;
-
-import com.ctre.phoenix.motion.TrajectoryPoint;
-
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -27,28 +21,14 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.Gate;
-import frc.robot.Constants.GroundIntake;
-import frc.robot.Constants.Hanger;
-import frc.robot.Constants.PastaPuller;
-import frc.robot.commands.DoNothing;
+import edu.wpi.first.wpilibj2.command.button.Button;
 // import frc.robot.commands.AutonomusCommand;
 // import frc.robot.commands.Calibrate;
 import frc.robot.commands.DriveWithJoystick;
-import frc.robot.commands.ExtendPiston;
-import frc.robot.commands.FlyWheelCommand;
-import frc.robot.commands.IndexerCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.MotorCommand;
-import frc.robot.commands.NudgeMotor;
+import frc.robot.commands.KVCommand;
 import frc.robot.commands.ResetPoistion;
-import frc.robot.commands.TurretTurn;
 // import frc.robot.commands.SetLightsToColor;
 // import frc.robot.commands.color_wheel.SpinNumberOfTimes;
 // import frc.robot.commands.color_wheel.SpinToColor;
@@ -116,22 +96,28 @@ public final class RobotContainer {
         feeder = new Feeder();
         shooterLights = new ShooterLights();
         trajectoryGeneration = new TrajectoryGeneration(driveTrain.getPose(),
-            new Pose2d(new Translation2d(-2, 0), new Rotation2d(Math.PI)), 
+        new Pose2d(new Translation2d(0, 4), new Rotation2d(Math.PI / 2)), 
             List.of( 
-            new Translation2d(-1,2),
-            new Translation2d(-2,2), 
-            new Translation2d(-2,6),
-            new Translation2d(0,6),
-            new Translation2d(-1,8),
-            new Translation2d(-2,6),
-            new Translation2d(0,6),
-            new Translation2d(0,1.5),
-            new Translation2d(-2,1.5)
+            new Translation2d(1,2)
             ),
              driveTrain);
+            // new Pose2d(new Translation2d(-2.5, 0.46), new Rotation2d(Math.PI)), 
+            // List.of( 
+            // new Translation2d(0,1.7),
+            // new Translation2d(-1.4,1.7), 
+            // new Translation2d(-1.4,6.3),
+            // new Translation2d(0.1,6.3),
+            // new Translation2d(-1.4,7.9),
+            // new Translation2d(-1.4,7.9),
+            // new Translation2d(0.2,6.3),
+            // new Translation2d(0,1.7),
+            // new Translation2d(-2.3,1.5)
+            // ),
+            //  driveTrain);
         trajectoryGeneration.generateTrajectory();
         driveTrain.setDefaultCommand(
             new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust));
+
         thumbButton = new JoystickButton(joystick, 2);
         twelveButton = new JoystickButton(joystick, 12);
         trigger = new JoystickButton(joystick, 1);
@@ -167,25 +153,38 @@ public final class RobotContainer {
         //trigger.whileHeld(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
         //threeButton.whileHeld(new FunctionalCommand(() -> hood.turnOn(0.5), () -> {}, (b) -> hood.turnOff(), () -> false, hood));
         //four.whileHeld(new FunctionalCommand(() -> hood.turnOn(-0.5), () -> {}, (b) -> hood.turnOff(), () -> false, hood));
-        twelveButton.whileHeld(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
-        nine.toggleWhenPressed(new ResetPoistion(driveTrain));
-        motorSubsystemButton(threeButton, hood, 0.5, false);
-        motorSubsystemButton(four, hood, -0.5, false);
-        motorSubsystemButton(five, turret, 0.5, false);
-        motorSubsystemButton(six, turret, -0.5, false);
-        motorSubsystemButton(trigger, flyWheel, 1, true);
-        motorSubsystemButton(ten, intake, 0.5, true);
-        motorSubsystemButton(eleven, indexer, 0.5, true);
-        motorSubsystemButton(eight, feeder, 0.5, true);
+        //twelveButton.whileHeld(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
+        //nine.toggleWhenPressed(new ResetPoistion(driveTrain));
+        motorSubsystemButton(operatorController.buttons.dPad.up , hood, 0.8, false);
+        motorSubsystemButton(operatorController.buttons.dPad.down, hood, -0.8, false);
+        motorSubsystemButton(operatorController.buttons.dPad.right, turret, -0.25, false);
+        motorSubsystemButton(operatorController.buttons.dPad.left, turret, 0.25, false);
+        motorSubsystemButton(operatorController.buttons.Y, flyWheel, 1, true);
+        motorSubsystemButton(operatorController.buttons.RB, intake, 0.5, true);
+        // motorSubsystemButton(operatorController.buttons.B, indexer, 0.8, true);
+        // motorSubsystemButton(operatorController.buttons.X, indexer, -0.8, true);
+        motorSubsystemButton(operatorController.buttons.LB, feeder, 0.5, true);
+        nine.whenPressed(new KVCommand(driveTrain));
+        eleven.whenPressed(new ResetPoistion(driveTrain));
+        indexer.setDefaultCommand(new FunctionalCommand(() -> {}, () -> indexer.turnOn(-operatorController.sticks.left.getY()), (b) -> {}, () -> false, indexer));
+        //left joystick index right joystick elevater
     }
-    public void motorSubsystemButton(JoystickButton jB, MotorSubsystem subsystem, double velocity, boolean toggle){
+    public void motorSubsystemButton(JoystickButton jB, MotorSubsystem subsystem, double velocity, boolean toggle) {
       if(toggle){
-        jB.toggleWhenPressed(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
+        jB.toggleWhenPressed(new FunctionalCommand(() -> subsystem.turnOn(velocity), () -> {}, (b) -> subsystem.turnOff(), () -> false, subsystem));
       }
       else{
         jB.whileHeld(new FunctionalCommand(() -> subsystem.turnOn(velocity), () -> {}, (b) -> subsystem.turnOff(), () -> false, subsystem));
       }   
     }
+    public void motorSubsystemButton(Button jB, MotorSubsystem subsystem, double velocity, boolean toggle) {
+        if(toggle){
+          jB.toggleWhenPressed(new FunctionalCommand(() -> subsystem.turnOn(velocity), () -> {}, (b) -> subsystem.turnOff(), () -> false, subsystem));
+        }
+        else{
+          jB.whileHeld(new FunctionalCommand(() -> subsystem.turnOn(velocity), () -> {}, (b) -> subsystem.turnOff(), () -> false, subsystem));
+        }   
+      }
     public double getJoystickX() {
         return this.joystick.getRawAxis(Constants.Joystick.X_AXIS);
     }

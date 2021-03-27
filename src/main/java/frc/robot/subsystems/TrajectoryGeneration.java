@@ -2,16 +2,14 @@ package frc.robot.subsystems;
 
 import java.util.List;
 
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveKinematicsConstraint;
+import edu.wpi.first.wpilibj.trajectory.constraint.EllipticalRegionConstraint;
+import edu.wpi.first.wpilibj.trajectory.constraint.TrajectoryConstraint;
 import frc.robot.SubsystemBaseWrapper;
 
 public final class TrajectoryGeneration extends SubsystemBaseWrapper {
@@ -27,13 +25,10 @@ public final class TrajectoryGeneration extends SubsystemBaseWrapper {
         this.wayPoints = wayPoints;
         this.driveTrain = subsystem;
         this.generated = false;
-        trajectoryConfig = new TrajectoryConfig(1, 0.5); //max v and a 4m/s and 4m/s^2 respectivly dosen't really matter right now but can fine tune it later
-        // trajectoryConfig.addConstraint(
-        //     new DifferentialDriveVoltageConstraint(
-        //         new SimpleMotorFeedforward(
-        //             Constants.VoltageConstants.kS,Constants.VoltageConstants.kV,Constants.VoltageConstants.kA),
-        //             driveTrain.kinematics, 10));
+        trajectoryConfig = new TrajectoryConfig(2, 0.5); //max v and a 2m/s and 0.5m/s^2 
         trajectoryConfig.setKinematics(driveTrain.kinematics);
+        trajectoryConfig.addConstraint(new DifferentialDriveKinematicsConstraint(driveTrain.kinematics, 2));
+        //trajectoryConfig.addConstraint(new EllipticalRegionConstraint(center, xWidth, yWidth, rotation, constraint))
         System.out.println("TrajectoryGeneration Constructor");
     }
     public void generateTrajectory(){
@@ -45,10 +40,20 @@ public final class TrajectoryGeneration extends SubsystemBaseWrapper {
         else{
             System.out.println("Trajectory Already Generated"); 
         }
-            //trajectory.relativeTo(new Pose2d(new Translation2d(0,0), new Rotation2d((3*Math.PI)/2)));
         System.out.println("End Trajectory Generation");
     }
     public Trajectory getTrajectory() {
         return trajectory;
     }
 }
+
+
+
+
+
+
+// trajectoryConfig.addConstraint(
+        //     new DifferentialDriveVoltageConstraint(
+        //         new SimpleMotorFeedforward(
+        //             Constants.VoltageConstants.kS,Constants.VoltageConstants.kV,Constants.VoltageConstants.kA),
+        //             driveTrain.kinematics, 10));

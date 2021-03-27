@@ -11,11 +11,12 @@ public class Feeder extends SubsystemBaseWrapper implements MotorSubsystem {
 
     public Feeder() {
         super();
-        motor = new TalonSRX(Constants.MotorSubsystems.INDEXER_ID);
+        motor = new TalonSRX(Constants.MotorSubsystems.FEEDER_ID);
     }
     
     public void turnOn(double velocity) {
-        setMotor(0.2);
+        setMotor(velocity);
+        System.out.println("Feeder");
     }
     public void turnOff(){
         setMotor(0);

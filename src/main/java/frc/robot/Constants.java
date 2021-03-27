@@ -103,21 +103,23 @@ public final class Constants {
         public static final int REAR_LEFT_MOTOR_ID = 3;
         public static final double COUNTS_PER_ROTAION = 4096;
         public static final double WHEEL_CIRCUMFRANCE = 0.4787787204; // meters 24 1/4in(tentative) // 2021 robot 0.4787787204 // 2020 robot 0.61595
-        public static final double CHASIS_TRACK_WIDTH = 0.6858; // meters
+        //public static final double CHASIS_TRACK_WIDTH = 0.6858; // meters
     }
     public final class VoltageConstants { // for 2020 robot update all constants in this class and the Drive Train class for new robot when possible
         public static final double kS = 1.2;
-        public static final double kV = 2.57;
+        public static final double kV = 3.620052274814374; //tested with my own program //3.620052274814374 //2.57
         public static final double kA = 0.525;
         public static final double TRACK_WIDTH = 0.5842;//0.7701078382789721;
-        public static final double kP = 2.49;
+        public static final double kP = 2.49; // 2.49
         //r^2 = 0.998 kP = 2.49 <- in case needed later (will need Kp not r^2)
     }
     public final class MotorSubsystems{
         public static final int FLYWHEEL_ID = 10;
-        public static final int INTAKE_ID = 6;
-        public static final int TURRET_ID = 9;
-        public static final int INDEXER_ID = 7;
+        public static final int INTAKE_ID = 4;
+        public static final int TURRET_ID = 12;
+        public static final int INDEXER_ID = 6;
+		public static final int FEEDER_ID = 5;
+		public static final int HOOD_ID = 11;
     }
     public static final class Joystick {
         public static final int X_AXIS = 0;

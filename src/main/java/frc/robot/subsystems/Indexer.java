@@ -16,7 +16,8 @@ public class Indexer extends SubsystemBaseWrapper implements MotorSubsystem{
     }
     
     public void turnOn(double velocity) {
-        setMotor(0.2);
+        setMotor(velocity);
+        System.out.println("Indexer");
     }
     public void turnOff(){
         setMotor(0);
