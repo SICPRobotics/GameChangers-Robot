@@ -129,6 +129,6 @@ public final class Constants {
     }
 
     public static final class PiClient {
-        public static final String uri = "ws://frcvision.local:5800";
+        public static final String uri = "ws://wpilibpi.local:5800";
     }
 }
