@@ -34,7 +34,7 @@ public class Hood extends SubsystemBaseWrapper implements MotorSubsystem {
     }
     public void calibrate(){
         if(!limit.get()){
-            setMotor(0.1);
+            setMotor(0.16);
         }
         else{
             setMotor(0);
@@ -49,7 +49,7 @@ public class Hood extends SubsystemBaseWrapper implements MotorSubsystem {
         return motor.getSelectedSensorPosition();
     }
     public void setAngle(double theta){
-
+        setMotor(getAngle() != theta  ? getAngle() > theta ? 0.16 : -0.16: 0);
     }
     public double getAngle(){
         return (encoderPos() * (1/4096) * (1/50) * 50) + 58.8; // 58.8 = theta at zero // need a constant for how much the encoder ticks increase degrease 50 is a very rouch estimate // 1 gear rotatoin moves to full exrtant, 

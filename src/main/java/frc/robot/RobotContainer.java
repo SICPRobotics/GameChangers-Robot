@@ -116,7 +116,7 @@ public final class RobotContainer {
             //  driveTrain);
         trajectoryGeneration.generateTrajectory();
         driveTrain.setDefaultCommand(
-            new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust));
+            new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
 
         thumbButton = new JoystickButton(joystick, 2);
         twelveButton = new JoystickButton(joystick, 12);
@@ -132,6 +132,8 @@ public final class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
         SmartDashboard.putNumber("Auton Chooser", 0);
+
+        shooterLights.set(true);
     }
 
     /**
@@ -141,9 +143,9 @@ public final class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        /*thumbButton.toggleWhenPressed(
-            new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
-        trigger.toggleWhenPressed(new MotorCommand(flyWheel, 1));
+        thumbButton.toggleWhenPressed(
+            new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, false));
+        /*trigger.toggleWhenPressed(new MotorCommand(flyWheel, 1));
         threeButton.toggleWhenPressed(new MotorCommand(hood, -0.2));
         five.whenPressed(new MotorCommand(turret, 0.2));
         six.whenPressed(new MotorCommand(turret, -0.2));
@@ -163,10 +165,11 @@ public final class RobotContainer {
         motorSubsystemButton(operatorController.buttons.RB, intake, 0.5, true);
         // motorSubsystemButton(operatorController.buttons.B, indexer, 0.8, true);
         // motorSubsystemButton(operatorController.buttons.X, indexer, -0.8, true);
-        motorSubsystemButton(operatorController.buttons.LB, feeder, 0.5, true);
+        motorSubsystemButton(operatorController.buttons.LB, feeder, 0.5, false);
+        //operatorController.buttons.Y.toggleWhenPressed(new FunctionalCommand(() -> flyWheel.reset(), () -> flyWheel.setMotorMaxOmega(), (b) -> flyWheel.setOff(), () -> false, flyWheel)); 
         nine.whenPressed(new KVCommand(driveTrain));
         eleven.whenPressed(new ResetPoistion(driveTrain));
-        indexer.setDefaultCommand(new FunctionalCommand(() -> {}, () -> indexer.turnOn(-operatorController.sticks.left.getY()), (b) -> {}, () -> false, indexer));
+        indexer.setDefaultCommand(new FunctionalCommand(() -> {}, () -> indexer.turnOn(operatorController.sticks.left.getY()), (b) -> {}, () -> false, indexer));
         //left joystick index right joystick elevater
     }
     public void motorSubsystemButton(JoystickButton jB, MotorSubsystem subsystem, double velocity, boolean toggle) {

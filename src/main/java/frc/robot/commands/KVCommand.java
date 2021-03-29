@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.WillowMath;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Intake;
 
 public class KVCommand extends CommandBase {
 
