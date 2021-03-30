@@ -20,9 +20,9 @@ public final class FlyWheel extends SubsystemBaseWrapper implements MotorSubsyst
     private final TalonFX motor;
     private final double kMomentOfInertia = 0.0028125; // very very loose estimate
     private final double kGearing = 1;
-    private final double kV = 0.023;
-    private final double kA = 0.001;
-    private final double kMaxRadsPerSec = 668; //6380 rpm * 2Pi / 60sec
+    private final double kV = 0.023; //very very loose estimate
+    private final double kA = 0.001; // alsp very very loose estimate
+    private final double kMaxRadsPerSec = 600; //6380 rpm * 2Pi / 60sec
 
       // The plant holds a state-space model of our flywheel. This system has the following properties:
   //
@@ -30,7 +30,7 @@ public final class FlyWheel extends SubsystemBaseWrapper implements MotorSubsyst
   // Inputs (what we can "put in"): [voltage], in volts.
   // Outputs (what we can measure): [velocity], in radians per second.
     private final LinearSystem<N1, N1, N1> plant = LinearSystemId.identifyVelocitySystem(kV, kA);
-    //createFlywheelSystem(DCMotor.getNEO(1), kMomentOfInertia, kGearing);
+    //private final LinearSystem<N1,N1,N1> plant = LinearSystemId.createFlywheelSystem(DCMotor.getNEO(1), kMomentOfInertia, kGearing);
     
       // The observer fuses our encoder data and voltage inputs to reject noise.
     private final KalmanFilter<N1, N1, N1> observer = new KalmanFilter<>(Nat.N1(), Nat.N1(), plant, 
@@ -77,12 +77,15 @@ public final class FlyWheel extends SubsystemBaseWrapper implements MotorSubsyst
     }
     public void setMotorMaxOmega(){
         System.out.println("MAX OMEGA");
-        loop.setNextR(1);
+        loop.setNextR(10);
         loop.correct(VecBuilder.fill(getOmega()));
         loop.predict(0.02);
-        motor.set(ControlMode.Current, loop.getU(0));
+        System.out.println(loop.getU(0));
+        motor.set(ControlMode.PercentOutput, loop.getU(0) * 12);
+        System.out.println(motor.getMotorOutputVoltage());
     }
     public void setMotor(final double value) {
         motor.set(ControlMode.PercentOutput, value);
+        
     }
 }

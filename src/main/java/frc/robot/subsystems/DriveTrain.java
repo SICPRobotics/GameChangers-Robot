@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -158,6 +159,7 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         return updateVelocity().omegaRadiansPerSecond;
     }
     private void updatePose(){
+        
         odometry.update(new Rotation2d(getRadians()), getLeftDistanceMeters(), getRightDistanceMeters());
     }
     public void reset(){

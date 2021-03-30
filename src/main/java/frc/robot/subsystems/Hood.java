@@ -19,10 +19,8 @@ public class Hood extends SubsystemBaseWrapper implements MotorSubsystem {
     }
     @Override
     public void periodic() {
-        //System.out.println(limit.get() + " , " + getAngle());
-        //System.out.println(limit.getChannel());
-        // SmartDashboard.putNumber("Hood Angle", this.getAngle());
-        // SmartDashboard.putBoolean("Hood Limit", this.limit.get());
+        SmartDashboard.putNumber("Hood Angle", this.getAngle());
+        SmartDashboard.putBoolean("Hood Limit", this.limit.get());
     }
     @Override
     public void turnOn(double velocity) {

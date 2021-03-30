@@ -166,7 +166,7 @@ public final class RobotContainer {
         // motorSubsystemButton(operatorController.buttons.B, indexer, 0.8, true);
         // motorSubsystemButton(operatorController.buttons.X, indexer, -0.8, true);
         motorSubsystemButton(operatorController.buttons.LB, feeder, 0.5, false);
-        //operatorController.buttons.Y.toggleWhenPressed(new FunctionalCommand(() -> flyWheel.reset(), () -> flyWheel.setMotorMaxOmega(), (b) -> flyWheel.setOff(), () -> false, flyWheel)); 
+        operatorController.buttons.A.toggleWhenPressed(new FunctionalCommand(() -> flyWheel.reset(), () -> flyWheel.setMotorMaxOmega(), (b) -> flyWheel.setOff(), () -> false, flyWheel)); 
         nine.whenPressed(new KVCommand(driveTrain));
         eleven.whenPressed(new ResetPoistion(driveTrain));
         indexer.setDefaultCommand(new FunctionalCommand(() -> {}, () -> indexer.turnOn(operatorController.sticks.left.getY()), (b) -> {}, () -> false, indexer));
