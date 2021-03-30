@@ -171,6 +171,8 @@ public final class RobotContainer {
         eleven.whenPressed(new ResetPoistion(driveTrain));
         indexer.setDefaultCommand(new FunctionalCommand(() -> {}, () -> indexer.turnOn(operatorController.sticks.left.getY()), (b) -> {}, () -> false, indexer));
         //left joystick index right joystick elevater
+
+        //shooterLights.setDefaultCommand(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
     }
     public void motorSubsystemButton(JoystickButton jB, MotorSubsystem subsystem, double velocity, boolean toggle) {
       if(toggle){
