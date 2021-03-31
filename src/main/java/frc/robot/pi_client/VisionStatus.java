@@ -14,12 +14,23 @@ public class VisionStatus {
         public VisionRect() {
 
         }
-        
+
         public VisionRect(int x, int y, int width, int height) {
+            set(x, y, width, height);
+        }
+
+        public void set(int x, int y, int width, int height) {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
+        }
+
+        public void set(VisionRect rect) {
+            this.x = rect.x;
+            this.y = rect.y;
+            this.width = rect.width;
+            this.height = rect.height;
         }
     }
 
@@ -28,23 +39,23 @@ public class VisionStatus {
         public double y;
 
         @JsonCreator
-        public Point() {
-
-        }
+        public Point() { }
 
         public Point(double x, double y) {
             this.x = x;
             this.y = y;
         }
-    }
 
-    @JsonCreator
-    public VisionStatus() {
-
+        public void set(org.opencv.core.Point p) {
+            this.x = p.x;
+            this.y = p.y;
+        }
     }
 
     @JsonMerge
-    public Point target;
+    public boolean targetFound = false;
     @JsonMerge
-    public VisionRect bbox;
+    public Point target = new Point();
+    @JsonMerge
+    public VisionRect bbox = new VisionRect();
 }

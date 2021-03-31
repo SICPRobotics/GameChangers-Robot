@@ -23,16 +23,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.Button;
 // import frc.robot.commands.AutonomusCommand;
 // import frc.robot.commands.Calibrate;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.KVCommand;
 import frc.robot.commands.ResetPoistion;
+import frc.robot.commands.VisionShoot;
 // import frc.robot.commands.SetLightsToColor;
 // import frc.robot.commands.color_wheel.SpinNumberOfTimes;
 // import frc.robot.commands.color_wheel.SpinToColor;
 import frc.robot.controllers.OperatorController;
+import frc.robot.pi_client.PiClient;
 // import frc.robot.subsystems.Cameras;
 // import frc.robot.subsystems.ColorWheelPiston;
 // import frc.robot.subsystems.Compessor;
@@ -78,6 +81,7 @@ public final class RobotContainer {
     private final JoystickButton ten;
     private final JoystickButton nine;
     private final JoystickButton eight;
+    private final PiClient pi = new PiClient();
     // private final Cameras cameras;
     // private final Lights lights;
     // private final RightWinch rightWinch;
@@ -177,6 +181,8 @@ public final class RobotContainer {
         // motorSubsystemButton(operatorController.buttons.B, indexer, 0.8, true);
         // motorSubsystemButton(operatorController.buttons.X, indexer, -0.8, true);
         motorSubsystemButton(operatorController.buttons.LB, feeder, 0.5, false);
+
+        new Trigger(() -> operatorController.triggers.right.get() > 0.5).whileActiveOnce(new VisionShoot(turret, flyWheel, indexer, feeder, pi));
         operatorController.buttons.A.toggleWhenPressed(new FunctionalCommand(() -> flyWheel.reset(), () -> flyWheel.setMotorMaxOmega(), (b) -> flyWheel.setOff(), () -> false, flyWheel)); 
         operatorController.buttons.X.toggleWhenPressed(new FunctionalCommand(() -> hood.setAngle(100), () -> {}, (b) -> hood.turnOff(), () -> false, hood));
         nine.whenPressed(new KVCommand(driveTrain));
@@ -184,6 +190,8 @@ public final class RobotContainer {
         operatorController.buttons.B.toggleWhenPressed(new FunctionalCommand(() -> hood.calibrate(), () -> {}, (b) -> hood.turnOff(), () -> false, hood)); 
         indexer.setDefaultCommand(new FunctionalCommand(() -> {}, () -> indexer.turnOn(operatorController.sticks.left.getY()), (b) -> {}, () -> false, indexer));
         //left joystick index right joystick elevater
+
+        //shooterLights.setDefaultCommand(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
     }
     public void motorSubsystemButton(JoystickButton jB, MotorSubsystem subsystem, double velocity, boolean toggle) {
       if(toggle){
