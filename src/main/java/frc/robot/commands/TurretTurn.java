@@ -10,6 +10,7 @@ public class TurretTurn extends CommandBase{
     public TurretTurn(Turret turret, double direction) {
         this.turret = turret;
         this.direction = direction;
+        addRequirements(turret);
     }
 
     @Override
