@@ -30,7 +30,7 @@ public class VisionShoot extends CommandBase {
 
     @Override
     public void initialize() {
-        flyWheel.setMotor(-1);
+        flyWheel.setMotor(1);
         shooting = false;
     }
 
