@@ -27,7 +27,7 @@ public final class TrajectoryGeneration extends SubsystemBaseWrapper {
         this.wayPoints = wayPoints;
         this.driveTrain = subsystem;
         this.generated = false;
-        trajectoryConfig = new TrajectoryConfig(3, 0.5); //max v and a 2m/s and 0.5m/s^2 
+        trajectoryConfig = new TrajectoryConfig(4, 0.5); //max v and a 2m/s and 0.5m/s^2 
         trajectoryConfig.setKinematics(driveTrain.kinematics);
         trajectoryConfig.addConstraint(new DifferentialDriveKinematicsConstraint(driveTrain.kinematics, 2));
         //trajectoryConfig.addConstraint(new EllipticalRegionConstraint(center, xWidth, yWidth, rotation, constraint))
