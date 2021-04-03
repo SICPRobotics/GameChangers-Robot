@@ -100,9 +100,20 @@ public final class RobotContainer {
         feeder = new Feeder();
         shooterLights = new ShooterLights();
         trajectoryGeneration = new TrajectoryGeneration(driveTrain.getPose(),
-        new Pose2d(new Translation2d(0, 4), new Rotation2d(Math.PI / 2)), 
-            List.of( 
-            new Translation2d(1,2)
+        new Pose2d(new Translation2d(-1.75, 0), new Rotation2d(3 * (Math.PI / 2))), 
+            List.of( //0.762 per box
+            new Translation2d(-0.75, 1),// middle of the first turn
+            new Translation2d(-1.5, 2), // end of first turn
+            new Translation2d(-1.5, 4.7), // first stight away
+            new Translation2d(-0.75, 5.7), // middle of second turn
+            new Translation2d(0, 6.5), // end of second turn
+            new Translation2d(-0.75, 7.25), // middle of end turn // circle part 
+            new Translation2d(-1.5, 6.5), // end of end tunr // circle part
+            new Translation2d(-0.75, 5.7), // mid of third turn 
+            new Translation2d(0, 4.7), // end of third turn
+            new Translation2d(0, 2), // end of stright away 
+            new Translation2d(-0.75, 1.25) // turn to end 
+            ///^^^^SLOLEM COURSE
             ),
              driveTrain);
             // new Pose2d(new Translation2d(-2.5, 0.46), new Rotation2d(Math.PI)), 
@@ -173,7 +184,7 @@ public final class RobotContainer {
 
         new Trigger(() -> operatorController.triggers.right.get() > 0.5).whileActiveOnce(new VisionShoot(turret, flyWheel, indexer, feeder, pi));
         operatorController.buttons.A.toggleWhenPressed(new FunctionalCommand(() -> flyWheel.reset(), () -> flyWheel.setMotorMaxOmega(), (b) -> flyWheel.setOff(), () -> false, flyWheel)); 
-        operatorController.buttons.X.toggleWhenPressed(new FunctionalCommand(() -> hood.setAngle(60), () -> {}, (b) -> hood.turnOff(), () -> false, hood));
+        operatorController.buttons.X.toggleWhenPressed(new FunctionalCommand(() -> hood.setAngle(100), () -> {}, (b) -> hood.turnOff(), () -> false, hood));
         nine.whenPressed(new KVCommand(driveTrain));
         eleven.whenPressed(new ResetPoistion(driveTrain));
         operatorController.buttons.B.toggleWhenPressed(new FunctionalCommand(() -> hood.calibrate(), () -> {}, (b) -> hood.turnOff(), () -> false, hood)); 
