@@ -9,6 +9,7 @@ package frc.robot;
 
 import java.util.List;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -100,36 +101,66 @@ public final class RobotContainer {
         feeder = new Feeder();
         shooterLights = new ShooterLights();
         trajectoryGeneration = new TrajectoryGeneration(driveTrain.getPose(),
-        new Pose2d(new Translation2d(-1.75, 0), new Rotation2d(3 * (Math.PI / 2))), 
+                new Pose2d(new Translation2d(0, 7)/* end (0, 0)*/ , new Rotation2d((Math.PI / 2))), 
             List.of( //0.762 per box
-            new Translation2d(-0.75, 1),// middle of the first turn
-            new Translation2d(-1.5, 2), // end of first turn
-            new Translation2d(-1.5, 4.7), // first stight away
-            new Translation2d(-0.75, 5.7), // middle of second turn
-            new Translation2d(0, 6.5), // end of second turn
-            new Translation2d(-0.75, 7.25), // middle of end turn // circle part 
-            new Translation2d(-1.5, 6.5), // end of end tunr // circle part
-            new Translation2d(-0.75, 5.7), // mid of third turn 
-            new Translation2d(0, 4.7), // end of third turn
-            new Translation2d(0, 2), // end of stright away 
-            new Translation2d(-0.75, 1.25) // turn to end 
-            ///^^^^SLOLEM COURSE
+              new Translation2d(0, 1.25),
+              new Translation2d(-1.5,1.25),
+              new Translation2d(0, 1.5),
+              new Translation2d(1, 1.75),
+              new Translation2d(1.5, 3.7),
+              new Translation2d(-1.8, 3.7),
+              new Translation2d(1.5, 3.7),
+              new Translation2d(1.5, 6),
+              new Translation2d(-1.8, 6),
+              new Translation2d(0, 6)
+            //^^^^Bunce Cource
             ),
+            //E6 (1.5, 3.7)
+            //A6 (-1.8, 3.7)
+            //E6 (1.5, 3.7)
+            //E9 (1.5, 6)
+            //A9 (-1.8, 6)
+            //C9 (0, 6)
+            //C10 (0, 7)
+        
+        
+        
+        // new Pose2d(new Translation2d(-0.3, 0)/* end (0, 0)*/ , new Rotation2d(3 * (Math.PI / 2))), 
+        //     List.of( //0.762 per box
+        //       new Translation2d(0,2.8),
+        //       new Translation2d(0.5, 4),
+        //       new Translation2d(1.6, 2.8),
+        //       new Translation2d(0.8, 2),
+        //       new Translation2d(0, 2),
+        //       new Translation2d(-0.3, 5.8),
+        //       new Translation2d(-1.5, 5.8),
+        //       new Translation2d(-2.1, 4.5),
+        //       new Translation2d(-1.1, 3.8),
+        //       new Translation2d(1, 6.25),
+        //       new Translation2d(-0.1, 6.75)
+        //     //^^^^Circle Cource
+        //     ),
+
+
+
+        // new Pose2d(new Translation2d(-1.75, 0), new Rotation2d(3 * (Math.PI / 2))), 
+        //     List.of( //0.762 per box
+        //     new Translation2d(-0.75, 1),// middle of the first turn
+        //     new Translation2d(-1.5, 2), // end of first turn
+        //     new Translation2d(-1.5, 4.7), // first stight away
+        //     new Translation2d(-0.75, 5.7), // middle of second turn
+        //     new Translation2d(0, 6.5), // end of second turn
+        //     new Translation2d(-0.75, 7.25), // middle of end turn // circle part 
+        //     new Translation2d(-1.5, 6.5), // end of end tunr // circle part
+        //     new Translation2d(-0.75, 5.7), // mid of third turn 
+        //     new Translation2d(0, 4.7), // end of third turn
+        //     new Translation2d(0, 2), // end of stright away 
+        //     new Translation2d(-0.75, 1.25) // turn to end 
+        //     ///^^^^SLOLEM COURSE
+        //     ),
              driveTrain);
-            // new Pose2d(new Translation2d(-2.5, 0.46), new Rotation2d(Math.PI)), 
-            // List.of( 
-            // new Translation2d(0,1.7),
-            // new Translation2d(-1.4,1.7), 
-            // new Translation2d(-1.4,6.3),
-            // new Translation2d(0.1,6.3),
-            // new Translation2d(-1.4,7.9),
-            // new Translation2d(-1.4,7.9),
-            // new Translation2d(0.2,6.3),
-            // new Translation2d(0,1.7),
-            // new Translation2d(-2.3,1.5)
-            // ),
-            //  driveTrain);
-        trajectoryGeneration.generateTrajectory();
+            
+          trajectoryGeneration.generateTrajectory();
         driveTrain.setDefaultCommand(
             new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
 
