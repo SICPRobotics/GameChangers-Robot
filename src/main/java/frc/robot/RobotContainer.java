@@ -220,7 +220,7 @@ public final class RobotContainer {
         eleven.whenPressed(new ResetPoistion(driveTrain));
         operatorController.buttons.B.toggleWhenPressed(new FunctionalCommand(() -> hood.calibrate(), () -> {}, (b) -> hood.turnOff(), () -> false, hood)); 
         indexer.setDefaultCommand(new FunctionalCommand(() -> {}, () -> indexer.turnOn(operatorController.sticks.left.getY()), (b) -> {}, () -> false, indexer));
-        //left joystick index right joystick elevater
+        //left joystick index right joystick elevator
 
         //shooterLights.setDefaultCommand(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
     }
