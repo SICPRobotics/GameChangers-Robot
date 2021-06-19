@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 // import frc.robot.commands.Calibrate;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.KVCommand;
+import frc.robot.commands.KatieCommand;
 import frc.robot.commands.ResetPoistion;
 import frc.robot.commands.VisionShoot;
 // import frc.robot.commands.SetLightsToColor;
@@ -212,6 +213,8 @@ public final class RobotContainer {
         // motorSubsystemButton(operatorController.buttons.B, indexer, 0.8, true);
         // motorSubsystemButton(operatorController.buttons.X, indexer, -0.8, true);
         motorSubsystemButton(operatorController.buttons.LB, feeder, 0.5, false);
+
+        operatorController.buttons.A.whenPressed(new KatieCommand(driveTrain));
 
         new Trigger(() -> operatorController.triggers.right.get() > 0.5).whileActiveOnce(new VisionShoot(turret, flyWheel, indexer, feeder, hood, pi));
         operatorController.buttons.A.toggleWhenPressed(new FunctionalCommand(() -> flyWheel.reset(), () -> flyWheel.setMotorMaxOmega(), (b) -> flyWheel.setOff(), () -> false, flyWheel)); 

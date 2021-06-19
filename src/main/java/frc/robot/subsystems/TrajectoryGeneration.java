@@ -33,6 +33,7 @@ public final class TrajectoryGeneration extends SubsystemBaseWrapper {
         //trajectoryConfig.addConstraint(new EllipticalRegionConstraint(center, xWidth, yWidth, rotation, constraint))
         System.out.println("TrajectoryGeneration Constructor");
     }
+    
     public TrajectoryGeneration(String trajectoryInput){
 
     }
