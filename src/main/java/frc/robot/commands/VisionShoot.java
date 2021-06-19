@@ -6,6 +6,7 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.pi_client.PiClient;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.FlyWheel;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Turret;
 
@@ -14,17 +15,22 @@ public class VisionShoot extends CommandBase {
     final FlyWheel flyWheel;
     final Indexer indexer;
     final Feeder feeder;
+    final Hood hood;
 
     final PiClient pi;
     final PIDController pid = new PIDController(0.001, 0.01, 0.02);
     boolean shooting = false;
-    public VisionShoot(final Turret turret, final FlyWheel flyWheel, final Indexer indexer, final Feeder feeder, final PiClient pi) {
+    public VisionShoot(final Turret turret, final FlyWheel flyWheel, final Indexer indexer, final Feeder feeder, final Hood hood, final PiClient pi) {
         this.turret = turret;
         this.flyWheel = flyWheel;
         this.indexer = indexer;
         this.feeder = feeder;
+        this.hood = hood;
 
         this.pi = pi;
+
+        System.out.println("VisionShoot");
+
         addRequirements(turret, flyWheel);
     }
 
@@ -39,11 +45,12 @@ public class VisionShoot extends CommandBase {
         if (!shooting) {
             final var val = pid.calculate(pi.getVisionStatus().target.x, 177);
             System.out.println(val);
-            if (Math.abs(pi.getVisionStatus().target.x - 177) < 5) {
+            if (Math.abs(pi.getVisionStatus().target.x - 177) < 20) {
                 shooting = true;
                 turret.setMotor(0);
                 indexer.setMotor(0.2);
                 feeder.setMotor(0.5);
+                //hood.setAngle(theta);
             } else {
                 turret.setMotor(MathUtil.clamp(val, -0.25, 0.25));
             }
@@ -54,6 +61,7 @@ public class VisionShoot extends CommandBase {
     public void end(boolean val) {
         flyWheel.setMotor(0);
         turret.setMotor(0);
+        feeder.setMotor(0);
     }
 
     @Override
