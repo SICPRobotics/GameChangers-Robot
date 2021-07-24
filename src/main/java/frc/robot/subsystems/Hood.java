@@ -20,7 +20,7 @@ public class Hood extends SubsystemBaseWrapper implements MotorSubsystem {
     @Override
     public void periodic() {
         //SmartDashboard.putNumber("Hood Angle", this.getAngle());
-        SmartDashboard.putNumber("Hood Position", encoderPos());
+        SmartDashboard.putNumber("Hood Position", getPosition());
         SmartDashboard.putBoolean("Hood Limit", this.limit.get());
 
         if (!limit.get() && motor.getMotorOutputPercent() > 0) {
@@ -53,7 +53,7 @@ public class Hood extends SubsystemBaseWrapper implements MotorSubsystem {
     public void setMotor(double value) {
         motor.set(ControlMode.PercentOutput, !limit.get() && value > 0 ? 0 : value);
     }
-    public double encoderPos(){
+    public double getPosition(){
         return motor.getSelectedSensorPosition();
     }
     /*public void setAngle(double theta){
@@ -63,6 +63,6 @@ public class Hood extends SubsystemBaseWrapper implements MotorSubsystem {
         motor.set(ControlMode.Position, pos);
     }
     public double getAngle(){
-        return (encoderPos() * (1/4096) * (1/50) * 50) + 58.8; // 58.8 = theta at zero // need a constant for how much the encoder ticks increase degrease 50 is a very rouch estimate // 1 gear rotatoin moves to full exrtant, 
+        return (getPosition() * (1/4096) * (1/50) * 50) + 58.8; // 58.8 = theta at zero // need a constant for how much the encoder ticks increase degrease 50 is a very rouch estimate // 1 gear rotatoin moves to full exrtant, 
     }
 }

@@ -47,22 +47,31 @@ public class VisionShoot extends CommandBase {
     @Override
     public void execute() {
         if (!shooting) {
+            var ready = true;
             final var val = xPid.calculate(pi.getVisionStatus().target.x, 177);
             System.out.println(val);
-            if (Math.abs(pi.getVisionStatus().target.x - 177) < 20) {
+            if (Math.abs(pi.getVisionStatus().target.x - 177) > 20) {
+                turret.setMotor(MathUtil.clamp(val, -0.25, 0.25));
+                ready = false;
+            }
+
+            if (Math.abs(getTargetHoodPosition() - hood.getPosition()) < 10) {
+                hood.setPosition(getTargetHoodPosition());
+                ready = false;
+            }
+
+            if (ready) {
                 shooting = true;
                 turret.setMotor(0);
+                hood.setMotor(0);
                 indexer.setMotor(0.2);
                 feeder.setMotor(0.5);
-                //hood.setAngle(theta);
-            } else {
-                turret.setMotor(MathUtil.clamp(val, -0.25, 0.25));
             }
         }
     }
 
-    public int getHoodPosition() {
-        
+    public int getTargetHoodPosition() {
+        return 0;
     }
 
     @Override

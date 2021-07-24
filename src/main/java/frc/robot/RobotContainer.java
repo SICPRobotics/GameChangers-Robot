@@ -213,7 +213,7 @@ public final class RobotContainer {
         // motorSubsystemButton(operatorController.buttons.X, indexer, -0.8, true);
         motorSubsystemButton(operatorController.buttons.LB, feeder, 0.5, false);
 
-        new Trigger(() -> operatorController.triggers.right.get() > 0.5).whileActiveOnce(new VisionShoot(turret, flyWheel, indexer, feeder, hood, pi));
+        new Trigger(() -> operatorController.triggers.right.get() > 0.5).whileActiveOnce(new VisionShoot(turret, flyWheel, indexer, feeder, hood, shooterLights, pi));
         operatorController.buttons.A.toggleWhenPressed(new FunctionalCommand(() -> flyWheel.reset(), () -> flyWheel.setMotorMaxOmega(), (b) -> flyWheel.setOff(), () -> false, flyWheel)); 
         operatorController.buttons.X.toggleWhenPressed(new FunctionalCommand(() -> hood.setPosition(1000), () -> {}, (b) -> hood.turnOff(), () -> false, hood));
         
