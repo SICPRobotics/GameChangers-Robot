@@ -160,7 +160,7 @@ public final class RobotContainer {
         //     ),
              driveTrain);
             
-          trajectoryGeneration.generateTrajectory();
+        trajectoryGeneration.generateTrajectory();
         driveTrain.setDefaultCommand(
             new DriveWithJoystick(driveTrain, this::getJoystickY, this::getJoystickX, this::getJoystickAdjust, true));
 
@@ -203,7 +203,7 @@ public final class RobotContainer {
         //four.whileHeld(new FunctionalCommand(() -> hood.turnOn(-0.5), () -> {}, (b) -> hood.turnOff(), () -> false, hood));
         //twelveButton.whileHeld(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
         //nine.toggleWhenPressed(new ResetPoistion(driveTrain));
-        motorSubsystemButton(operatorController.buttons.dPad.up , hood, 0.8, false);
+        motorSubsystemButton(operatorController.buttons.dPad.up, hood, 0.8, false);
         motorSubsystemButton(operatorController.buttons.dPad.down, hood, -0.8, false);
         motorSubsystemButton(operatorController.buttons.dPad.right, turret, -0.25, false);
         motorSubsystemButton(operatorController.buttons.dPad.left, turret, 0.25, false);
@@ -220,27 +220,19 @@ public final class RobotContainer {
         nine.whenPressed(new KVCommand(driveTrain));
         eleven.whenPressed(new ResetPoistion(driveTrain));
         operatorController.buttons.B.toggleWhenPressed(new FunctionalCommand(() -> hood.calibrate(), () -> {}, (b) -> hood.turnOff(), () -> false, hood)); 
-        indexer.setDefaultCommand(new FunctionalCommand(() -> {}, () -> indexer.turnOn(operatorController.sticks.left.getY()), (b) -> {}, () -> false, indexer));
+        indexer.setDefaultCommand(new FunctionalCommand(() -> {}, () -> indexer.turnOn(operatorController.sticks.left.getY() * -1), (b) -> {}, () -> false, indexer));
         //left joystick index right joystick elevator
 
         //shooterLights.setDefaultCommand(new FunctionalCommand(() -> shooterLights.set(true), () -> {}, (b) -> shooterLights.set(false), () -> false, shooterLights));
     }
-    public void motorSubsystemButton(JoystickButton jB, MotorSubsystem subsystem, double velocity, boolean toggle) {
-      if(toggle){
-        jB.toggleWhenPressed(new FunctionalCommand(() -> subsystem.turnOn(velocity), () -> {}, (b) -> subsystem.turnOff(), () -> false, subsystem));
-      }
-      else{
-        jB.whileHeld(new FunctionalCommand(() -> subsystem.turnOn(velocity), () -> {}, (b) -> subsystem.turnOff(), () -> false, subsystem));
-      }   
-    }
     public void motorSubsystemButton(Button jB, MotorSubsystem subsystem, double velocity, boolean toggle) {
         if(toggle){
-          jB.toggleWhenPressed(new FunctionalCommand(() -> subsystem.turnOn(velocity), () -> {}, (b) -> subsystem.turnOff(), () -> false, subsystem));
+            jB.toggleWhenPressed(new FunctionalCommand(() -> subsystem.turnOn(velocity), () -> {}, (b) -> subsystem.turnOff(), () -> false, subsystem));
         }
         else{
-          jB.whileHeld(new FunctionalCommand(() -> subsystem.turnOn(velocity), () -> {}, (b) -> subsystem.turnOff(), () -> false, subsystem));
+            jB.whileHeld(new FunctionalCommand(() -> subsystem.turnOn(velocity), () -> {}, (b) -> subsystem.turnOff(), () -> false, subsystem));
         }   
-      }
+    }
     public double getJoystickX() {
         return this.joystick.getRawAxis(Constants.Joystick.X_AXIS);
     }
