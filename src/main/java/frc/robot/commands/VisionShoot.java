@@ -8,6 +8,7 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.FlyWheel;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.ShooterLights;
 import frc.robot.subsystems.Turret;
 
 public class VisionShoot extends CommandBase {
@@ -16,34 +17,37 @@ public class VisionShoot extends CommandBase {
     final Indexer indexer;
     final Feeder feeder;
     final Hood hood;
+    final ShooterLights lights;
 
     final PiClient pi;
-    final PIDController pid = new PIDController(0.001, 0.01, 0.02);
+    final PIDController xPid = new PIDController(0.001, 0.01, 0.02);
     boolean shooting = false;
-    public VisionShoot(final Turret turret, final FlyWheel flyWheel, final Indexer indexer, final Feeder feeder, final Hood hood, final PiClient pi) {
+    public VisionShoot(final Turret turret, final FlyWheel flyWheel, final Indexer indexer, final Feeder feeder, final Hood hood, final ShooterLights lights, final PiClient pi) {
         this.turret = turret;
         this.flyWheel = flyWheel;
         this.indexer = indexer;
         this.feeder = feeder;
         this.hood = hood;
+        this.lights = lights;
 
         this.pi = pi;
 
         System.out.println("VisionShoot");
 
-        addRequirements(turret, flyWheel);
+        addRequirements(turret, flyWheel, lights);
     }
 
     @Override
     public void initialize() {
         flyWheel.setMotor(1);
+        lights.set(true);
         shooting = false;
     }
 
     @Override
     public void execute() {
         if (!shooting) {
-            final var val = pid.calculate(pi.getVisionStatus().target.x, 177);
+            final var val = xPid.calculate(pi.getVisionStatus().target.x, 177);
             System.out.println(val);
             if (Math.abs(pi.getVisionStatus().target.x - 177) < 20) {
                 shooting = true;
@@ -57,11 +61,16 @@ public class VisionShoot extends CommandBase {
         }
     }
 
+    public int getHoodPosition() {
+        
+    }
+
     @Override
     public void end(boolean val) {
         flyWheel.setMotor(0);
         turret.setMotor(0);
         feeder.setMotor(0);
+        lights.set(false);
     }
 
     @Override
