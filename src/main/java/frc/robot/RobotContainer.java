@@ -208,7 +208,7 @@ public final class RobotContainer {
         motorSubsystemButton(operatorController.buttons.dPad.right, turret, -0.25, false);
         motorSubsystemButton(operatorController.buttons.dPad.left, turret, 0.25, false);
         motorSubsystemButton(operatorController.buttons.Y, flyWheel, 1, true);
-        motorSubsystemButton(operatorController.buttons.RB, intake, 0.5, true);
+        motorSubsystemButton(operatorController.buttons.RB, intake, -0.75, false);
         // motorSubsystemButton(operatorController.buttons.B, indexer, 0.8, true);
         // motorSubsystemButton(operatorController.buttons.X, indexer, -0.8, true);
         motorSubsystemButton(operatorController.buttons.LB, feeder, 0.5, false);
