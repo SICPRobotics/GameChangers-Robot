@@ -12,6 +12,7 @@ import java.util.List;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
@@ -22,6 +23,7 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -179,7 +181,7 @@ public final class RobotContainer {
         configureButtonBindings();
         SmartDashboard.putNumber("Auton Chooser", 0);
 
-        shooterLights.set(true);
+        //shooterLights.set(true);
     }
 
     /**
@@ -264,7 +266,7 @@ public final class RobotContainer {
         //return new AutonomusCommand(driveTrain, gate, pastaPuller, hangerArm);
         //PLAN: subsystem to generate trajectory, brings in the tragectory into here and those paramiters, kiniatics is handledd by DriveTrain, 
         //Ramsete Command will be made Here and this method will just return that. 
-        return //new FunctionalCommand(() -> flyWheel.turnOn(-1), () -> {}, (b) -> {}, () -> true, flyWheel).alongWith(
+        /*return //new FunctionalCommand(() -> flyWheel.turnOn(-1), () -> {}, (b) -> {}, () -> true, flyWheel).alongWith(
                //new FunctionalCommand(() -> intake.turnOn(-1), () -> {}, (b) -> {}, () -> true, intake)).andThen( 
                (new RamseteCommand(
                 trajectoryGeneration.getTrajectory(),
@@ -276,7 +278,23 @@ public final class RobotContainer {
                 new PIDController(Constants.VoltageConstants.kP, 0, 0), 
                 new PIDController(Constants.VoltageConstants.kP, 0, 0),
                 driveTrain.tankDriveVolts,
-                driveTrain));
+                driveTrain));*/
+
+        final var timer = new Timer();
+        return //new ParallelCommandGroup(
+                new FunctionalCommand(() -> {
+                    hood.setMotor(0.2);
+                    //driveTrain.cheesyDrive(0.4, 0, 1);
+                }, () -> driveTrain.driveForward(), (b) -> {}, () -> false, hood);
+                /*new FunctionalCommand(() -> {
+                    driveTrain.cheesyDrive(0.5, 0, 1);
+                    System.out.println("Started");
+                    timer.reset();
+                    timer.start();
+                }, () -> {}, (b) -> {
+                    driveTrain.cheesyDrive(0, 0, 1);
+                    System.out.println("Ended");
+                }, () -> timer.get() > 3, driveTrain));*/
     }
     
 }

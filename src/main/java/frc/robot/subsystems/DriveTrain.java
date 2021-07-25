@@ -118,6 +118,10 @@ public final class DriveTrain extends SubsystemBaseWrapper {
         //System.out.println(this.getPose().toString());
         SmartDashboard.putString("Pose2d", this.getPose().toString());
     }
+
+    public void driveForward() {
+        this.robotDrive.arcadeDrive(-.4, 0);
+    }
     public double getRightDistanceMeters(){
         return ((double)(frontRight.getSelectedSensorPosition()) / Constants.DriveTrain.COUNTS_PER_ROTAION) * Constants.DriveTrain.WHEEL_CIRCUMFRANCE;
     }

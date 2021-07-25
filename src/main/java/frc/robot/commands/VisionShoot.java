@@ -34,12 +34,12 @@ public class VisionShoot extends CommandBase {
 
         System.out.println("VisionShoot");
 
-        addRequirements(turret, flyWheel, lights);
+        addRequirements(turret, lights);
     }
 
     @Override
     public void initialize() {
-        flyWheel.setMotor(1);
+        //flyWheel.setMotor(1);
         lights.set(true);
         shooting = false;
     }
@@ -64,8 +64,8 @@ public class VisionShoot extends CommandBase {
                 shooting = true;
                 turret.setMotor(0);
                 hood.setMotor(0);
-                indexer.setMotor(0.2);
-                feeder.setMotor(0.5);
+                //indexer.setMotor(0.2);
+                //feeder.setMotor(0.5);
             }
         }
     }
@@ -80,9 +80,9 @@ public class VisionShoot extends CommandBase {
 
     @Override
     public void end(boolean val) {
-        flyWheel.setMotor(0);
+        //flyWheel.setMotor(0);
         turret.setMotor(0);
-        feeder.setMotor(0);
+        //feeder.setMotor(0);
         lights.set(false);
     }
 
