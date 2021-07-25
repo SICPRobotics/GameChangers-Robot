@@ -56,7 +56,7 @@ public class VisionShoot extends CommandBase {
             }
 
             if (Math.abs(getTargetHoodPosition() - hood.getPosition()) < 10) {
-                hood.setPosition(getTargetHoodPosition());
+                hood.setPosition((int) getTargetHoodPosition());
                 ready = false;
             }
 
@@ -70,8 +70,12 @@ public class VisionShoot extends CommandBase {
         }
     }
 
-    public int getTargetHoodPosition() {
-        return 0;
+    public double getTargetHoodPosition() {
+        // Determined experimentally
+        // One practice we shot the balls at the target from different distances and used the
+        // data points in a nonlinear regression to come up with this formula
+        // -Serena
+        return -0.9544 * Math.pow(pi.getVisionStatus().target.y + 17.3853, 2) + 57595.7;
     }
 
     @Override
